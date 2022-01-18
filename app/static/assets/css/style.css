@@ -1,5 +1,5 @@
 body {
-    font-family:'Philosopher', Tahoma, Geneva, Verdana, sans-serif;
+    font-family:'Poppins', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f9f9f9;
     color: #000;
 }
@@ -57,8 +57,8 @@ a:hover {
 }
 
 .btn-primary, .btn-primary:active, .btn-primary:focus{
-    background-color: #000000;
-    border-color: #000000;
+    background-color: #5277f7;
+    border-color: #5277f7;
     color: #fff;
     border-radius: 0px;
     margin-top: 4px;
@@ -69,8 +69,8 @@ a:hover {
 }
 
 .btn-primary:hover{
-    background-color: #000000;
-    border-color: #000000;
+    background-color: #5277f7;
+    border-color: #5277f7;
     color: #fff;
     border-radius: 0px;
     margin-top: 4px;
@@ -106,7 +106,7 @@ a:hover {
 }
 
 .logo-colour{
-    color: #000000;
+    color: #5277f7;
 }
 
 .logocolour{
@@ -128,7 +128,6 @@ a:hover {
 	margin-bottom: 10px;
 	background: #fff;
 	padding: 30px;
-    border: 2px solid #000
 }
 
 .login-form h1  {
@@ -160,7 +159,7 @@ a:hover {
 .login-form .btn {        
 	font-size: 16px;
 	font-weight: bold;
-	background: #000000 ;
+	background: #5277f7 ;
 	border: none;
 	min-height: 50px;
     color: #fff;
@@ -168,7 +167,7 @@ a:hover {
 }
 
 .login-form .btn:hover, .login-form .btn:focus {
-	background: #000000 !important;
+	background: #5277f7 !important;
 	outline: none;
 	min-height: 50px;
     color: #fff;
@@ -186,13 +185,13 @@ a:hover {
 }
 
 .login-form form a {
-	color: #0000ff;
+	color: #5277f7;
 	text-decoration: none;
 }	
 
 .login-form form a:hover {
 	text-decoration: none;
-    color: #0000ff;
+    color: #5277f7;
 }
 
 .login-form .hint-text  {
@@ -216,7 +215,6 @@ a:hover {
 	border-radius: 0px;
 	margin-bottom: 5px;
 	background: #fff;
-    border: 2px solid #000000;
 	padding: 30px;
 }
 .signup-form h1 {
@@ -247,7 +245,7 @@ a:hover {
 .signup-form .btn {        
 	font-size: 16px;
 	font-weight: bold;
-	background: #000000 ;
+	background: #5277f7 ;
 	border: none;
 	min-height: 50px;
     color: #fff;
@@ -255,7 +253,7 @@ a:hover {
 }
 
 .signup-form .btn:hover, .signup-form .btn:focus {
-	background: #000000 !important;
+	background: #5277f7 !important;
 	outline: none;
 	min-height: 50px;
     color: #fff;
@@ -263,22 +261,22 @@ a:hover {
 }
 
 .signup-form a {
-	color: #0000ff;
+	color: #5277f7;
 	text-decoration: none;
 }
 
 .signup-form a:hover {
-    color: #0000ff ;
+    color: #5277f7 ;
 	text-decoration: none;
 }
 
 .signup-form form a {
-	color: #0000ff;
+	color: #5277f7;
 	text-decoration: none;
 }	
 
 .signup-form form a:hover {
-    color: #0000ff;
+    color: #5277f7;
 	text-decoration: none;
 }
 
@@ -289,9 +287,13 @@ a:hover {
 
 .form-control{
     border-radius: 0px;
-    border-color: #000000;
+    border-color: #777;
 }
 
 .alert{
 	margin: 10px;
+}
+
+.masthead{
+	margin-top: 100px;
 }

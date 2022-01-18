@@ -14,7 +14,7 @@
         {% endif %}
     {% endwith %}
     
-    <div class="signup-form">
+    <div class="signup-form shadow">
         <form action="" method="POST">
             {{ form.csrf_token }}
             {% for field, errors in form.errors.items() %}
