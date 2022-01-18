@@ -109,3 +109,7 @@ def logout():
 @app.route('/bugs')
 def bugs():
     return render_template('Bugs.html')
+
+@app.route('/bug-details')
+def bugs_details():
+    return render_template('Bug Details.html')
