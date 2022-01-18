@@ -1,1 +1,44 @@
+<<<<<<< HEAD
 <h1 class="text-center">Flask Bug Tracker</h1>
+=======
+{% extends "Base.html" %}
+
+<div class="container">
+	{% include 'Navbar.html' %}
+</div>
+
+{% block content %}
+
+<header class="masthead">
+	<div class="container px-5">
+		<div class="row gx-5 align-items-center">
+			<div class="col-lg-6">
+				<!-- Mashead text and app badges-->
+				<div class="mb-5 mb-lg-0 text-lg-start">
+					<h1 class="display-3 lh-1 mb-3"><b>Track & Report Bugs</b></h1>
+					<p class="lead fw-normal text-muted">High quality, flexible and fully customizable online bug issue tracking</p>
+					<button class="btn btn-md btn-primary">Get Started</button>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<!-- Masthead device mockup feature-->
+				<div class="masthead-device-mockup">
+					<div class="device-wrapper">
+						<div class="device" data-device="iPhoneX" data-orientation="portrait" data-color="black">
+							<div class="screen bg-black">
+								<img src="{{ url_for('static', filename='assets/images/hero-image.png') }}">
+								<!-- PUT CONTENTS HERE:-->
+								<!-- * * This can be a video, image, or just about anything else.-->
+								<!-- * * Set the max width of your media to 100% and the height to-->
+								<!-- * * 100% like the demo example below.-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+{% endblock %}
+>>>>>>> snk
