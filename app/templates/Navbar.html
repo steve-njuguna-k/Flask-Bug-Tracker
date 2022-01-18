@@ -23,14 +23,15 @@
                 </ul>
                 <div class="d-flex">
                     <div class="dropdown">
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('logout') }}">
+                            <button class="btn btn-md btn-primary ms-3" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false" style="margin-left: 30px;">Logout</button>
+                        </a>
+                        {% else %}
                         <a href="{{ url_for('login') }}">
                             <button class="btn btn-md btn-primary ms-3" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false" style="margin-left: 30px;">Register | Log In</button>
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#"><i class="fal fa-user-alt"></i> My Profile</a>
-                            <a class="dropdown-item" href="#"><i class="fal fa-file-alt"></i> My Bugs</a>
-                            <a class="dropdown-item" href="#"><i class="fal fa-sign-out"></i> Logout</a>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

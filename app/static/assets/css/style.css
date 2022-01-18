@@ -120,7 +120,6 @@ a:hover {
 .login-form {
 	width: 450px;
 	margin: 30px auto;
-    margin-top: 80px;
 }
 
 .login-form form {
@@ -291,4 +290,8 @@ a:hover {
 .form-control{
     border-radius: 0px;
     border-color: #000000;
+}
+
+.alert{
+	margin: 10px;
 }

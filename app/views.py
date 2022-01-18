@@ -24,7 +24,7 @@ def register():
     form = RegisterForm(request.form)
     if form.validate_on_submit():
         password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=password, confirmed=False)
+        new_user = User(username=form.username.data, email=form.email.data, password=password, confirmed=False)
         
         email = User.query.filter_by(email=form.email.data).first()
         if email:
@@ -32,14 +32,14 @@ def register():
             return redirect(url_for("register"))
         
         else:
-            db.session.add(user)
+            db.session.add(new_user)
             db.session.commit()
 
-            token = generate_confirmation_token(user.email)
+            token = generate_confirmation_token(new_user.email)
             confirm_url = url_for('confirm_email', token=token, _external=True)
             html = render_template('Activation.html', confirm_url=confirm_url)
             subject = "[PITCH DECK] Confrim Your Email Address"
-            send_email(user.email, subject, html)
+            send_email(new_user.email, subject, html)
 
             return redirect(url_for("email_verification_sent"))
 
