@@ -81,7 +81,8 @@
                 <center><img class="rounded" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" height="100" width="100"></center>
                 <br>
                 <h3 class="card-subtitle mb-2 text-primary text-center"><b>Mike Burner</b></h3>
-                <p class="card-text text-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                <center><span class="date text-black" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> 18/01/2022</span></center>
+                <p class="card-text text-center py-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
                 <center><a href="#" class="btn btn-primary btn-sm">Visit Profile</a></center>
                 </div>
             </div>
@@ -101,7 +102,7 @@
                     <br>
                     <h5 class="card-title"><b>Bug Title</b></h5>
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary btn-sm">More Information</a>
+                    <a href="#" class="text-primary">More Information</a>
                 </div>
             </div>
             <div class="card" style="margin-bottom: 10px;">
@@ -118,7 +119,7 @@
                     <br>
                     <h5 class="card-title"><b>Bug Title</b></h5>
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary btn-sm">More Information</a>
+                    <a href="#" class="text-primary">More Information</a>
                 </div>
             </div>
             <div class="card" style="margin-bottom: 10px;">
@@ -135,11 +136,19 @@
                     <br>
                     <h5 class="card-title"><b>Bug Title</b></h5>
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary btn-sm">More Information</a>
+                    <a href="#" class="text-primary">More Information</a>
                 </div>
             </div>
         </div>       
     </div>
 </div>
+
+{% block footer %}
+	<div class="container">
+		<div id="footer">
+			<p class="text-center">© 2022 Bug Tracker</p>
+		</div>
+	</div>
+{% endblock %}
 
 {% endblock %}
