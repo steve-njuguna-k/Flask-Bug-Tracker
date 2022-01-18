@@ -63,3 +63,12 @@ def confirm_email(token):
         flash('⚠️ The Confirmation Link Is Invalid Or Has Expired.', 'danger')
 
     return redirect(url_for('login'))
+
+@app.route('/sent')
+def email_verification_sent():
+    if User.confirmed==1:
+        flash('✅ You Can Now Log In!', 'success')
+        return redirect(url_for('login'))
+    else:
+        flash('✅ Registration Successful! A Confirmation Link Has Been Sent To The Registered Email Address.', 'success')
+        return redirect(url_for('register'))
