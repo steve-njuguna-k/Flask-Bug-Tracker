@@ -105,3 +105,7 @@ def logout():
     logout_user()
     # redirecting to home page
     return redirect(url_for('home'))
+
+@app.route('/bugs')
+def bugs():
+    return render_template('Bugs.html')

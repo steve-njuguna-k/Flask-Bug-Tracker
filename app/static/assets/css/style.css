@@ -19,6 +19,11 @@ a:hover {
     color: #000000;
 }
 
+.container-f{
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
 .navbar.navbar-dark .nav-item .nav-link { 
     color: #000!important; 
     background-color: #fff;
@@ -81,14 +86,14 @@ a:hover {
 }
 
 .btn-link{
-    color: #000;
+    color: #5277f7;
 	border-radius: 0px;
     margin-top: 1px;
     padding: 9px;
 }
 
 .link{
-    color: #000;
+    color: #5277f7;
 	border-radius: 0px;
     margin-top: 1px;
 }
@@ -295,5 +300,9 @@ a:hover {
 }
 
 .masthead{
+	margin-top: 50px;
+}
+
+.landing{
 	margin-top: 100px;
 }
