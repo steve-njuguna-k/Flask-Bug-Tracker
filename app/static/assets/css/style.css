@@ -116,3 +116,92 @@ a:hover {
 .dropdown-item:focus, .dropdown-item:active{
 	background-color: #000;
 }
+
+.login-form {
+	width: 450px;
+	margin: 30px auto;
+    margin-top: 80px;
+}
+
+.login-form form {
+	color: #000 ;
+	border-radius: 0px;
+	margin-bottom: 10px;
+	background: #fff;
+	padding: 30px;
+    border: 2px solid #000
+}
+
+.login-form h1  {
+	color: #000 ;
+	font-weight: bold;
+	margin-top: 0;
+}
+
+.login-form hr  {
+	margin: 0 -30px 20px;
+} 
+
+.login-form .form-group {
+	margin-bottom: 20px;
+}
+
+.login-form input[type="checkbox"] {
+	margin-top: 3px;
+}
+
+.login-form .row div:first-child {
+	padding-right: 10px;
+}
+
+.login-form .row div:last-child {
+	padding-left: 10px;
+}
+
+.login-form .btn {        
+	font-size: 16px;
+	font-weight: bold;
+	background: #000000 ;
+	border: none;
+	min-height: 50px;
+    color: #fff;
+}
+
+.login-form .btn:hover, .login-form .btn:focus {
+	background: #000000 !important;
+	outline: none;
+	min-height: 50px;
+    color: #fff;
+}
+
+.login-form a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.login-form a:hover {
+	text-decoration: none;
+    color: #fff;
+}
+
+.login-form form a {
+	color: #0000ff;
+	text-decoration: none;
+}	
+
+.login-form form a:hover {
+	text-decoration: none;
+    color: #0000ff;
+}
+
+.login-form .hint-text  {
+	padding-bottom: 15px;
+	text-align: center;
+}
+
+.toggle-password {
+    float: right;
+    cursor: pointer;
+    margin-right: 15px;
+    margin-top: -30px;
+}
