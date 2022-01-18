@@ -1,0 +1,118 @@
+body {
+    font-family:'Philosopher', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff;
+    color: #000;
+}
+
+p {
+    font-size: 14px;
+	color: #000;
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #000000;
+}
+
+.navbar.navbar-dark .nav-item .nav-link { 
+    color: #000!important; 
+    background-color: #fff;
+} 
+
+.navbar.navbar-dark .nav-item .nav-link:hover { 
+    color: #000000 !important; 
+    background-color: #fff;
+}
+
+.navbar {
+    background-color: #fff!important;
+}
+
+.navbar-nav {
+    background-color: #fff;
+}
+
+.navbar-brand {
+    background-color: #fff;
+}
+
+.navbar-dark .navbar-toggler {
+    color: #000000 ;
+    border-color: #000000 ;
+	background-color: #000000 ;
+}
+
+.text-primary{
+	color: #000000!important;
+}
+
+.searchbar{
+    border-radius: 0px;
+	border-color: 6px solid rgba(240, 246, 252, 0.1);
+}
+
+.btn-primary, .btn-primary:active, .btn-primary:focus{
+    background-color: #000000;
+    border-color: #000000;
+    color: #fff;
+    border-radius: 0px;
+    margin-top: 4px;
+    padding-top: 7px;
+	padding-bottom: 7px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+.btn-primary:hover{
+    background-color: #000000;
+    border-color: #000000;
+    color: #fff;
+    border-radius: 0px;
+    margin-top: 4px;
+    padding-top: 7px;
+	padding-bottom: 7px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+.btn-link{
+    color: #000;
+	border-radius: 0px;
+    margin-top: 1px;
+    padding: 9px;
+}
+
+.link{
+    color: #000;
+	border-radius: 0px;
+    margin-top: 1px;
+}
+
+.btn-link:hover{
+    color: #000000;
+	border-radius: 0px;
+    margin-top: 1px;
+    padding: 9px;
+	text-decoration: none;
+}
+
+.logo{
+    margin-bottom: 0px;
+}
+
+.logo-colour{
+    color: #000;
+}
+
+.logocolour{
+    color: #000000;
+}
+
+.dropdown-item:focus, .dropdown-item:active{
+	background-color: #000;
+}
