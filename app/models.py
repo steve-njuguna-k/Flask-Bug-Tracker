@@ -4,8 +4,8 @@ from flask_login import UserMixin
 
 db = SQLAlchemy()
 
-post_tags = db.Table('post_tags',
-    db.Column('post_id', db.Integer, db.ForeignKey('posts.id')),
+bug_tags = db.Table('bug_tags',
+    db.Column('bug_id', db.Integer, db.ForeignKey('bugs.id')),
     db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
 )
 
@@ -52,8 +52,8 @@ class Bugs(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(20000), nullable=False)
-    comment = db.relationship('Comments', backref='post', lazy='dynamic')
-    tags = db.relationship('Tags',secondary=post_tags, back_populates="posts")
+    comment = db.relationship('Comments', backref='bug', lazy='dynamic')
+    tags = db.relationship('Tags',secondary=bug_tags, back_populates="bugs")
     author = db.Column(db.Integer,db.ForeignKey('users.id'))
     is_resolved = db.Column(db.Boolean, nullable=False, default=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
@@ -88,7 +88,7 @@ class Tags(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
-    bugs = db.relationship('Bugs', secondary = post_tags, back_populates = "tags")
+    bugs = db.relationship('Bugs', secondary = bug_tags, back_populates = "tags")
     created_on = db.Column(db.DateTime, default = datetime.datetime.utcnow)
 
     def __repr__(self):
