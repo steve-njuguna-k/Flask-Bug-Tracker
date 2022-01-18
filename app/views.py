@@ -3,6 +3,7 @@ from app import app
 from flask import render_template, flash, redirect, request, url_for
 from .token import confirm_token, generate_confirmation_token
 from flask_bcrypt import Bcrypt
+from flask_login import current_user, login_user, logout_user, login_required
 from .email import send_email
 from .forms import LoginForm, RegisterForm
 from .models import db, User
@@ -12,11 +13,6 @@ bcrypt = Bcrypt(app)
 @app.route('/')
 def home():
     return render_template('Index.html')
-
-@app.route('/login')
-def login():
-    form = LoginForm()
-    return render_template('Log In.html', form = form)
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -72,3 +68,26 @@ def email_verification_sent():
     else:
         flash('✅ Registration Successful! A Confirmation Link Has Been Sent To The Registered Email Address.', 'success')
         return redirect(url_for('register'))
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    form = LoginForm(request.form)
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and user.confirmed ==0:
+            flash('⚠️ Your Acount Is Not Activated! Please Check Your Email Inbox And Click The Activation Link We Sent To Activate It', 'danger')
+            return render_template('Login.html', form=form)
+
+        if user and bcrypt.check_password_hash(user.password, request.form['password']):
+            login_user(user)
+            return redirect(url_for('home'))
+        
+        if user and not bcrypt.check_password_hash(user.password, request.form['password']):
+            flash('⚠️ Invalid Password!', 'danger')
+            return render_template('Login.html', form=form)
+
+        if not user:
+            flash('⚠️ Account Does Not Exist!', 'danger')
+            return render_template('Login.html', form=form)
+
+    return render_template('Login.html', form=form)
