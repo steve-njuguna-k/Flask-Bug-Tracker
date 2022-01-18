@@ -14,6 +14,11 @@ bcrypt = Bcrypt(app)
 def home():
     return render_template('Index.html')
 
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('Dashboard.html')
+
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
@@ -80,7 +85,7 @@ def login():
 
         if user and bcrypt.check_password_hash(user.password, request.form['password']):
             login_user(user)
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard'))
         
         if user and not bcrypt.check_password_hash(user.password, request.form['password']):
             flash('⚠️ Invalid Password!', 'danger')
@@ -91,3 +96,12 @@ def login():
             return render_template('Login.html', form=form)
 
     return render_template('Login.html', form=form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    user = current_user
+    user.authenticated = False
+    logout_user()
+    # redirecting to home page
+    return redirect(url_for('home'))
