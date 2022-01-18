@@ -113,3 +113,7 @@ def bugs():
 @app.route('/bug-details')
 def bugs_details():
     return render_template('Bug Details.html')
+
+@app.route('/profile')
+def profile():
+    return render_template('Profile.html')
