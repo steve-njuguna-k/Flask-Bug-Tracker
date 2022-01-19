@@ -5,6 +5,18 @@
 </div>
 
 {% block content %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show text-center" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
 <div class="container-fluid" style="margin-top: 30px;">
     <div class="row">
@@ -14,11 +26,25 @@
         <div class="col-sm-8">
             <h1 class="text-center">Add Bug</h1>
             <form style="margin-bottom: 50px;">
+                {% for field, errors in form.errors.items() %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ ', '.join(errors) }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
                 <div class="mb-3">
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Your Issue"></textarea>
+                    {{ form.title(class="form-control", placeholder="Title") }}
                 </div>
                 <div class="mb-3">
-                    <button class="btn btn-block btn-primary">Submit</button>
+                    {{ form.description(class="form-control", placeholder="Description") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.tags(class="form-control", placeholder="Tags") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.submit(class="form-control btn btn-primary", placeholder="Submit") }}
                 </div>
             </form>
         </div>
