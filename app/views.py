@@ -105,5 +105,6 @@ def delete_post():
 def change_post_status(post_id):
     '''
     post = Post.query.get(post_id)
-    
+    # mark as done
+
     '''
