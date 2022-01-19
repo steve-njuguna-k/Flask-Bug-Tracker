@@ -5,7 +5,7 @@ from .token import confirm_token, generate_confirmation_token
 from flask_bcrypt import Bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from .email import send_email
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
 from .models import db, User
 
 bcrypt = Bcrypt(app)
@@ -117,3 +117,9 @@ def bugs_details():
 @app.route('/profile')
 def profile():
     return render_template('Profile.html')
+
+@app.route('/bug/add')
+@login_required
+def add():
+    form = CreatePostForm()
+    return render_template('Add Bug.html', form = form)
