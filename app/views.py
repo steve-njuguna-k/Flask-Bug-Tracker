@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-from app import app
-from flask import render_template
-
-@app.route('/')
-def home():
-    return render_template('Index.html')
-=======
 import datetime
 from app import app
 from flask import render_template, flash, redirect, request, url_for
@@ -125,4 +117,3 @@ def bugs_details():
 @app.route('/profile')
 def profile():
     return render_template('Profile.html')
->>>>>>> snk

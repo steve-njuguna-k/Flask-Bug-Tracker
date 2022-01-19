@@ -1,9 +1,7 @@
 from flask import Flask
-<<<<<<< HEAD
 
 app = Flask(__name__)
 
-=======
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from .models import User, db
@@ -35,5 +33,4 @@ bcrypt = Bcrypt(app)
 def load_user(user_id):
     return User.query.get(user_id)
 
->>>>>>> snk
 from app import views
