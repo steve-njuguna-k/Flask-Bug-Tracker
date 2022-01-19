@@ -117,3 +117,8 @@ def bugs_details():
 @app.route('/profile')
 def profile():
     return render_template('Profile.html')
+
+@app.route('/bug/add')
+@login_required
+def add():
+    return render_template('Add Bug.html')

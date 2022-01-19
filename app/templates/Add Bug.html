@@ -1,0 +1,39 @@
+{% extends "Base.html" %}
+
+<div class="container">
+	{% include 'Navbar.html' %}
+</div>
+
+{% block content %}
+
+<div class="container-fluid" style="margin-top: 30px;">
+    <div class="row">
+        <div class="col-sm-2">
+            
+        </div> 
+        <div class="col-sm-8">
+            <h1 class="text-center">Add Bug</h1>
+            <form style="margin-bottom: 50px;">
+                <div class="mb-3">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Your Comment/Solution"></textarea>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-block btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-2">
+            
+        </div>       
+    </div>
+</div>
+
+{% block footer %}
+	<div class="container">
+		<div id="footer">
+			<p class="text-center">© 2022 Bug Tracker</p>
+		</div>
+	</div>
+{% endblock %}
+
+{% endblock %}
