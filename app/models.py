@@ -55,10 +55,14 @@ class Bugs(db.Model):
     comment = db.relationship('Comments', backref='bug_comment', lazy='dynamic')
     tags = db.relationship('Tags',secondary=bug_tags, back_populates="bugs")
     author = db.Column(db.Integer,db.ForeignKey('users.id'))
-    is_resolved = db.Column(db.Boolean, nullable=False, default=False)
+    # supposed to be status - String
+    # unresolved, resolved, in progress
+    status = db.Column(db.String, nullable=False, default='unresolved')
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     created_on = db.Column(db.DateTime, default = datetime.datetime.utcnow())
     updated_on = db.Column(db.DateTime, nullable=True)
+    upvotes = db.relationship('Upvote', backref='bug_upvotes')
+    downvotes = db.relationship('Downvote', backref='bug_downvotes')
 
     def __init__(self, title, description):
         self.title = title
@@ -76,6 +80,8 @@ class Comments(db.Model):
     bug = db.Column(db.Integer, db.ForeignKey('bugs.id'))
     date_published = db.Column(db.DateTime, default = datetime.datetime.utcnow)
     user = db.Column(db.Integer,db.ForeignKey('users.id'))
+    upvotes = db.relationship('Upvote', backref='comment_upvotes')
+    downvotes = db.relationship('Downvote', backref='comment_downvotes')
 
     def __init__(self, comment):
         self.comment = comment
@@ -100,6 +106,7 @@ class Upvote(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
     bug_id = db.Column(db.Integer,db.ForeignKey('bugs.id'))
+    comment_id = db.Column(db.Integer,db.ForeignKey('comments.id'))
 
     @classmethod
     def get_upvotes(cls,id):
@@ -115,6 +122,7 @@ class Downvote(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
     bug_id = db.Column(db.Integer,db.ForeignKey('bugs.id'))
+    comment_id = db.Column(db.Integer,db.ForeignKey('comments.id'))
     
     @classmethod
     def get_downvotes(cls,id):
