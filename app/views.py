@@ -310,6 +310,36 @@ def like_comment(id, comment_id):
             flash ('✅ You Have Liked That Comment!', 'success')
             return render_template('Bug Details.html', bug = bug, comments = comments)
 
+# downvote comment
+@app.route('/bug/<int:id>/comment/<int:comment_id>/dislike')
+@login_required
+def dislike_comment(id, comment_id):
+    bug = Bugs.query.get(id)
+    comments = Comments.query.filter_by(bug_id = id).order_by(desc(Comments.date_published)).all()
+
+    if not bug:
+        return "post not found"
+
+    else:
+        like = Downvote.query.filter_by(user_id=current_user.id, bug_id = bug.id, comment_id=comment_id).first()
+
+        if like:
+            flash('⚠️ You Can Only Dislike Once!', 'danger')
+            return render_template('Bug Details.html', bug = bug, comments = comments)
+
+        else:
+            like = Downvote(
+                user_id=current_user.id,
+                bug_id = bug.id,
+                comment_id = comment_id
+            )
+
+            db.session.add(like)
+            db.session.commit()
+
+            flash ('✅ You Have Disliked That Comment!', 'success')
+            return render_template('Bug Details.html', bug = bug, comments = comments)
+
 
 @app.errorhandler(404)
 def not_found(e):
@@ -462,32 +492,32 @@ def dislike_post(post_id):
 
 #         return render_template('Bug Details.html')
 
-# downvote comment
-@app.route('/downvote/comment/<comment_id>')
-@login_required
-def dislike_comment(comment_id):
-    post = Bugs.query.get(comment_id)
+# # downvote comment
+# @app.route('/downvote/comment/<comment_id>')
+# @login_required
+# def dislike_comment(comment_id):
+#     post = Bugs.query.get(comment_id)
 
-    if not post:
-        return "post not found"
+#     if not post:
+#         return "post not found"
 
-    else:
-        dislike = Downvote.query.filter_by(user_id=current_user.id, comment_id=comment_id).first()
+#     else:
+#         dislike = Downvote.query.filter_by(user_id=current_user.id, comment_id=comment_id).first()
 
-        if dislike:
-            # dislike the post
-            db.session.delete(dislike)
-            db.session.commit()
+#         if dislike:
+#             # dislike the post
+#             db.session.delete(dislike)
+#             db.session.commit()
 
-            return render_template('Bug Details.html')
+#             return render_template('Bug Details.html')
 
-        else:
-            dislike = Downvote(
-                user_id=current_user.id,
-                comment_id=comment_id
-            )
+#         else:
+#             dislike = Downvote(
+#                 user_id=current_user.id,
+#                 comment_id=comment_id
+#             )
 
-            db.session.add(dislike)
-            db.session.commit()
+#             db.session.add(dislike)
+#             db.session.commit()
 
-        return render_template('Bug Details.html')
+#         return render_template('Bug Details.html')
