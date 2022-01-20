@@ -310,3 +310,11 @@ a:hover {
 .btnlink{
 	color: #000000;
 }
+
+.btn-danger{
+	background-color: #dd0000;
+}
+
+.btn-danger:hover{
+	background-color: #dd0000;
+}
