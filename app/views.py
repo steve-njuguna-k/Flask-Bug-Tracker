@@ -184,19 +184,19 @@ def update_bug_post(id):
     return render_template('Edit Bug.html', bug = bug, form = form)
 
 # delete post
+@app.route('/bug/<int:id>/delete', methods=['POST', 'GET'])
 @login_required
-@app.route('/delete/post/<post_id>', methods=['DELETE'])
-def delete_post(post_id):
-    post = Bugs.query.get(post_id)
+def delete_post(id):
+    bug = Bugs.query.get_or_404(id)
 
-    if not post:
-        return render_template('404.html')
-
-    else:
-        db.session.delete(post)
-        db.session.commit()
-
-        return render_template('Dashboard.html')
+    if current_user.id != bug.author:
+        flash('⚠️ You Are Not Authorized To Delete This Post! You Are Not The Author', 'danger')
+        return redirect(url_for('dashboard'))
+    
+    db.session.delete(bug)
+    db.session.commit()
+    flash ('✅ The Bug Post Has Been Successfully Delete!', 'success')
+    return redirect(url_for('dashboard', id = id))
 
 @app.route('/profile')
 def profile():
