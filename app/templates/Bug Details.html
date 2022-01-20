@@ -62,35 +62,43 @@
                 </div>
             </div>
             <h2 style="margin-top: 50px;">Comments</h2>
-            {% for comment in comments %}
-            <div class="card" style="margin-bottom: 20px;">
-                <div class="card-body">
-                    <div class="d-flex flex-row user-info">
-                        <img class="rounded" src="{{ comment.user_comment.profile_pic}}" height="50" width="50">
-                        <div class="d-flex flex-column justify-content-start ml-2">
-                            <a href="#">
-                                <span class="d-block font-weight-bold text-primary">{{ comment.user_comment.username }}</span>
-                            </a>
-                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ comment.date_published.strftime('%d/%m/%Y, %I:%M %p') }}</span>
+            {% if comments %}
+                {% for comment in comments %}
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-body">
+                        <div class="d-flex flex-row user-info">
+                            <img class="rounded" src="{{ comment.user_comment.profile_pic}}" height="50" width="50">
+                            <div class="d-flex flex-column justify-content-start ml-2">
+                                <a href="#">
+                                    <span class="d-block font-weight-bold text-primary">{{ comment.user_comment.username }}</span>
+                                </a>
+                                <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ comment.date_published.strftime('%d/%m/%Y, %I:%M %p') }}</span>
+                            </div>
                         </div>
+                        <br>
+                        <p class="card-text">{{ comment.comment }}</p> 
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-success" href="#"><i class="fa fa-thumbs-up"></i> (0) </a>
+                            <a class="btn btn-sm btn-danger" href="#"><i class="fa fa-thumbs-down"></i> (0) </a>
+                        </div>
+                        {% if current_user.id == bug.author %}
+                        <a href="{{url_for('delete_comment', id = bug.id, comment_id = comment.id)}}" class="float-right">
+                            <button type="submit" id="dislikes" class="btn btn-sm btn-outline-danger" ><i class="far fa-trash"></i> Delete</button>
+                        </a>
+                        <a href="/bug/{{ bug.id }}/comment/{{ comment.id }}/edit" class="float-right" style="margin-right: 5px;">
+                            <button class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</button>
+                        </a>
+                        {% endif %}
                     </div>
-                    <br>
-                    <p class="card-text">{{ comment.comment }}</p> 
-                    <div class="btn-group">
-                        <a class="btn btn-sm btn-success" href="#"><i class="fa fa-thumbs-up"></i> (0) </a>
-                        <a class="btn btn-sm btn-danger" href="#"><i class="fa fa-thumbs-down"></i> (0) </a>
-                    </div>
-                    {% if current_user.id == bug.author %}
-                    <a href="/bug/{{ bug.id }}/comment/{{ comment.id }}/edit" class="float-right">
-                        <button class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</button>
-                    </a>
-                    <a href="#" class="float-right" style="margin-right: 5px;">
-                        <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#editBugComment{{bug.id}}"><i class="far fa-trash"></i> Delete</button>
-                    </a>
-                    {% endif %}
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="text-center" style="margin-top: 70px;">
+                    <i class="far fa-comments fa-5x"></i>
+                    <br>
+                    <h3 class="text-center py-4">Be The First To Help</h3>
+                </div>
+            {% endif %}
         </div>
         <div class="col-sm-4">
             <h4><i class="fas fa-user-circle"></i> Author Information</h4>
@@ -99,7 +107,7 @@
                 <center><img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="100" width="100"></center>
                 <br>
                 <h3 class="card-subtitle mb-2 text-primary text-center"><b>{{ bug.user_bug.username }}</b></h3>
-                <center><span class="date text-black" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> Member Since: {{ bug.user_bug.registered_on.strftime('%d/%m/%Y') }}</span></center>
+                <center><span class="date text-black" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> Member Since: {{ bug.user_bug.registered_on.strftime('%d/%m/%Y, %I:%M %p') }}</span></center>
                 <p class="card-text text-center py-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
                 <center><a href="#" class="btn btn-primary btn-sm">Visit Profile</a></center>
                 </div>

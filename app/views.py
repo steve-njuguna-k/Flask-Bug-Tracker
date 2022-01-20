@@ -150,8 +150,9 @@ def bugs_details(id):
     comments = Comments.query.filter_by(bug_id = id).order_by(desc(Comments.date_published)).all()
     bugs = Bugs.query.all()
     bug = Bugs.query.filter_by(id = id).first()
+    comment = Comments.query.filter_by(id = id).first()
 
-    return render_template('Bug Details.html', form = form, bug = bug, bugs = bugs, comments = comments)
+    return render_template('Bug Details.html', form = form, bug = bug, bugs = bugs, comments = comments, comment = comment)
 
 # update post
 @app.route('/bug/<int:id>/edit', methods=['GET', 'POST'])
@@ -196,7 +197,7 @@ def delete_post(id):
     db.session.delete(bug)
     db.session.commit()
     flash ('✅ The Bug Post Has Been Successfully Delete!', 'success')
-    return redirect(url_for('dashboard', id = id))
+    return redirect(url_for('dashboard'))
 
 @app.route('/dashboard')
 @login_required
@@ -255,6 +256,57 @@ def edit_comment(id, comment_id):
         return redirect(url_for('bugs_details', id = bug.id, form = form))
     
     return render_template('Edit Comment.html', id = bug.id, form = form, bug = bug)
+
+@app.route('/bug/<int:id>/comment/<int:comment_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_comment(id, comment_id):
+    comment = Comments.query.filter_by(id = comment_id).first()
+    bug = Bugs.query.get_or_404(id)
+
+    if not bug:
+        flash('⚠️ Comment Does Not Exist!', 'danger')
+        return redirect(url_for('bug_details', id = bug.id))
+
+    elif current_user.id != comment.author and current_user.id != comment.bug_id:
+        flash('⚠️ You Are Not Authorized To Delete This Comment! You Are Not The Post Author or Comment Author.', 'danger')
+        return redirect(url_for('bug_details', id = bug.id))
+    
+    else:
+        db.session.delete(comment)
+        db.session.commit()
+        flash ('✅ The Comment Has Been Successfully Deleted!', 'success')
+        
+    return render_template('Bug Details.html', id = bug.id, bug = bug)
+
+# upvote comment
+@app.route('/upvote/comment/<int:id>')
+@login_required
+def like_comment(id):
+    comment = Comments.query.get(id)
+
+    if not comment:
+        return "post not found"
+
+    else:
+        like = Upvote.query.filter_by(user_id=current_user.id, comment_id=id).first()
+
+        if like:
+            # dislike the post
+            db.session.delete(like)
+            db.session.commit()
+
+            return render_template('Bug Details.html')
+
+        else:
+            like = Upvote(
+                user_id = current_user.id,
+                comment_id = comment.id
+            )
+
+            db.session.add(like)
+            db.session.commit()
+
+        return render_template('Bug Details.html')
 
 @app.errorhandler(404)
 def not_found(e):
@@ -317,21 +369,6 @@ def delete_user(username):
         db.session.commit()
 
         return "user deleted"
-
-# delete comment
-@app.route('/delete/comment/<comment_id>', methods=['DELETE'])
-@login_required
-def delete_comment(comment_id):
-    comment = Comments.query.get(comment_id)
-
-    if not comment:
-        return render_template('404.html')
-
-    else:
-        db.session.delete(comment)
-        db.session.commit()
-
-        return render_template('Bug Details.html')
 
 # upvote post
 @app.route('/upvote/post/<post_id>')

@@ -7,9 +7,22 @@
 {% block content %}
 
 <div class="container-fluid" style="margin-top: 30px;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show text-center" role="alert">
+                    <span>{{ message }}</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <h2>Dashboard | My Bugs</h2>
     <br>
     <div class="row">
+    {% if bugs %}
         {% for bug in bugs %}
         <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
             <div class="card">
@@ -33,6 +46,13 @@
             </div>
         </div>
         {% endfor %}
+    {% else %}
+        <div class="text-center" style="margin-top: 70px;">
+            <i class="far fa-bug fa-5x"></i>
+            <br>
+            <h3 class="text-center py-4">No Bug Posts</h3>
+        </div>
+    {% endif %}
     </div>
 </div>
 

@@ -133,11 +133,21 @@ a:hover {
 .btn-danger{
 	background-color: #dd0000;
 	color: #fff;
+	border-radius: 0px;
+    padding-top: 7px;
+	padding-bottom: 7px;
+	padding-left: 25px;
+	padding-right: 25px;
 }
 
 .btn-danger:hover{
 	background-color: #dd0000;
 	color: #fff;
+	border-radius: 0px;
+    padding-top: 7px;
+	padding-bottom: 7px;
+	padding-left: 25px;
+	padding-right: 25px;
 }
 
 .btn-outline-danger{
@@ -162,12 +172,22 @@ a:hover {
 	background-color: #03d87f;
 	color: #fff;
 	border-color: #03d87f;
+	border-radius: 0px;
+    padding-top: 7px;
+	padding-bottom: 7px;
+	padding-left: 25px;
+	padding-right: 25px;
 }
 
 .btn-success:hover{
 	background-color: #03d87f;
 	color: #fff;
 	border-color: #03d87f;
+	border-radius: 0px;
+    padding-top: 7px;
+	padding-bottom: 7px;
+	padding-left: 25px;
+	padding-right: 25px;
 }
 
 .btn-warning{
