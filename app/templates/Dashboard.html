@@ -10,120 +10,29 @@
     <h2>Dashboard | My Bugs</h2>
     <br>
     <div class="row">
+        {% for bug in bugs %}
         <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex flex-row user-info">
-                        <img class="rounded" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" height="50" width="50">
+                        <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
                         <div class="d-flex flex-column justify-content-start ml-2">
                             <a href="#">
-                                <span class="d-block font-weight-bold text-primary">Mike Burner</span>
+                                <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
                             </a>
-                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> 18/01/2022</span>
+                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y') }}</span>
                         </div>
                     </div>
                     <br>
-                    <h5 class="card-title"><b>Bug Title</b></h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="text-primary">More Information</a>
+                    <a href="/bug/{{bug.id}}/bug-details">
+                        <h5 class="card-title"><b>{{ bug.title }}</b></h5>
+                    </a>
+                    <p class="card-text">{{ bug.description[:100] + " ..." }}</p>
+                    <a href="/bug/{{bug.id}}/bug-details" class="text-primary">More Information</a>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex flex-row user-info">
-                        <img class="rounded" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" height="50" width="50">
-                        <div class="d-flex flex-column justify-content-start ml-2">
-                            <a href="#">
-                                <span class="d-block font-weight-bold text-primary">Mike Burner</span>
-                            </a>
-                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> 18/01/2022</span>
-                        </div>
-                    </div>
-                    <br>
-                    <h5 class="card-title"><b>Bug Title</b></h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="text-primary">More Information</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex flex-row user-info">
-                        <img class="rounded" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" height="50" width="50">
-                        <div class="d-flex flex-column justify-content-start ml-2">
-                            <a href="#">
-                                <span class="d-block font-weight-bold text-primary">Mike Burner</span>
-                            </a>
-                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> 18/01/2022</span>
-                        </div>
-                    </div>
-                    <br>
-                    <h5 class="card-title"><b>Bug Title</b></h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="text-primary">More Information</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex flex-row user-info">
-                        <img class="rounded" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" height="50" width="50">
-                        <div class="d-flex flex-column justify-content-start ml-2">
-                            <a href="#">
-                                <span class="d-block font-weight-bold text-primary">Mike Burner</span>
-                            </a>
-                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> 18/01/2022</span>
-                        </div>
-                    </div>
-                    <br>
-                    <h5 class="card-title"><b>Bug Title</b></h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="text-primary">More Information</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex flex-row user-info">
-                        <img class="rounded" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" height="50" width="50">
-                        <div class="d-flex flex-column justify-content-start ml-2">
-                            <a href="#">
-                                <span class="d-block font-weight-bold text-primary">Mike Burner</span>
-                            </a>
-                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> 18/01/2022</span>
-                        </div>
-                    </div>
-                    <br>
-                    <h5 class="card-title"><b>Bug Title</b></h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="text-primary">More Information</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex flex-row user-info">
-                        <img class="rounded" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" height="50" width="50">
-                        <div class="d-flex flex-column justify-content-start ml-2">
-                            <a href="#">
-                                <span class="d-block font-weight-bold text-primary">Mike Burner</span>
-                            </a>
-                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> 18/01/2022</span>
-                        </div>
-                    </div>
-                    <br>
-                    <h5 class="card-title"><b>Bug Title</b></h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="text-primary">More Information</a>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 

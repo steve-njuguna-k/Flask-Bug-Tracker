@@ -16,11 +16,6 @@ bcrypt = Bcrypt(app)
 def home():
     return render_template('Index.html')
 
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('Dashboard.html')
-
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
@@ -198,9 +193,17 @@ def delete_post(id):
     flash ('✅ The Bug Post Has Been Successfully Delete!', 'success')
     return redirect(url_for('dashboard', id = id))
 
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    bugs = Bugs.query.filter_by(author = current_user._get_current_object().id)
+    return render_template('Dashboard.html', bugs = bugs)
+
 @app.route('/profile')
 def profile():
-    return render_template('Profile.html')
+    bugs = Bugs.query.filter_by(author = current_user._get_current_object().id)
+    user = current_user._get_current_object()
+    return render_template('Profile.html', bugs = bugs, user = user)
 
 # NOTE: Routes by ismailpervez below
 @app.errorhandler(404)
