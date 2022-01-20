@@ -7,7 +7,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from .email import send_email
 from .forms import LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
-from .models import db, User, Bugs, Comments, Upvote, Downvote
+from .models import db, User, Bugs, Comments, Upvote, Downvote, Tags
 import ast
 
 bcrypt = Bcrypt(app)
@@ -108,6 +108,40 @@ def logout():
     # redirecting to home page
     return redirect(url_for('home'))
 
+@app.route('/bug/add', methods = ['GET', 'POST'])
+@login_required
+def add_bug():
+    form = CreatePostForm()
+    if form.validate_on_submit():
+        bug = Bugs(form.title.data, form.description.data)
+        bug.title = form.title.data
+        bug.description = form.description.data
+        tag_string = form.tags.data
+        tags = tag_string.split(",")
+        for tag in tags:
+            bug_tag = add_tags(tag)
+            print (bug_tag)
+            bug.tags.append(bug_tag)
+        
+        bug.author = current_user._get_current_object().id
+
+        db.session.add(bug)
+        db.session.commit()
+        flash ('✅ New Bug Post Successfully Created!', 'success')
+        return redirect(url_for('add_bug'))
+        
+    return render_template("Add Bug.html", form = form)
+
+def add_tags(tag):
+    existing_tag = Tags.query.filter(Tags.name == tag.lower()).one_or_none()
+    """if it does return existing tag objec to list"""
+    if existing_tag is not None:
+        return existing_tag
+    else:
+       new_tag = Tags()
+       new_tag.name = tag.lower()
+       return new_tag
+
 @app.route('/bugs')
 def bugs():
     return render_template('Bugs.html')
@@ -119,13 +153,6 @@ def bugs_details():
 @app.route('/profile')
 def profile():
     return render_template('Profile.html')
-
-@app.route('/bug/add')
-@login_required
-def add():
-    form = CreatePostForm()
-    return render_template('Add Bug.html', form = form)
-
 
 # NOTE: Routes by ismailpervez below
 @app.errorhandler(404)
@@ -195,28 +222,6 @@ def delete_user(username):
 def get_posts():
     posts = Bugs.query.all()
     return render_template('Bugs.html', bugs=posts)
-
-# create post
-@app.route('/create/post', methods=['GET', 'POST'])
-@login_required
-def create_post():
-    # form = CreateBug()
-    form = CreatePostForm()
-    if request.method == 'GET':
-        return render_template("Add Bug.html", form=form)
-
-    elif request.method == 'POST':
-        
-        bug = Bugs(
-            title=form.title.data,
-            description=form.description.data,
-            tags=str(form.tags.data.split(' '))
-        )
-
-        db.session.add(bug)
-        db.session.commit()
-        
-        return render_template("Add Bug.html", form=form)
 
 # get full post
 @app.route('/post/<post_id>')

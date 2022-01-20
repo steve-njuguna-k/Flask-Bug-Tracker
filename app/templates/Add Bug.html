@@ -25,7 +25,8 @@
         </div> 
         <div class="col-sm-8">
             <h1 class="text-center">Add Bug</h1>
-            <form style="margin-bottom: 50px;">
+            <form style="margin-bottom: 50px;" action="" method="POST">
+                {{ form.csrf_token }}
                 {% for field, errors in form.errors.items() %}
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         {{ ', '.join(errors) }}
