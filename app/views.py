@@ -1,12 +1,14 @@
 import datetime
 from telnetlib import DO
+
+from sqlalchemy import desc
 from app import app
 from flask import render_template, flash, redirect, request, url_for
 from .token import confirm_token, generate_confirmation_token
 from flask_bcrypt import Bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from .email import send_email
-from .forms import CommentsForm, LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
+from .forms import AddCommentsForm, EditCommentsForm, LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
 from .models import db, User, Bugs, Comments, Upvote, Downvote, Tags
 import ast
 
@@ -144,8 +146,8 @@ def bugs():
 
 @app.route('/bug/<int:id>/bug-details', methods = ['POST', 'GET'])
 def bugs_details(id):
-    form = CommentsForm()
-    comments = Comments.query.filter_by(bug_id = id).all()
+    form = AddCommentsForm()
+    comments = Comments.query.filter_by(bug_id = id).order_by(desc(Comments.date_published)).all()
     bugs = Bugs.query.all()
     bug = Bugs.query.filter_by(id = id).first()
 
@@ -214,7 +216,7 @@ def profile():
 def add_comment(id):
     bug_id = Bugs.query.get(id).id
     bug = Bugs.query.filter_by(id = id).first()
-    form = CommentsForm()
+    form = AddCommentsForm()
     comment = form.comment.data
     author = current_user.id
     if form.validate_on_submit():
@@ -227,6 +229,32 @@ def add_comment(id):
 
     return render_template('Add Comment.html', form = form, bug = bug)
 
+# update post
+@app.route('/bug/<int:id>/comment/<int:comment_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_comment(id, comment_id):
+    form = EditCommentsForm(request.form)
+    comment = Comments.query.filter_by(id = comment_id).first()
+    bug = Bugs.query.filter_by(id = id).first()
+
+    if form.validate_on_submit():        
+        comment.comment = form.comment.data
+        comment.author = current_user._get_current_object().id
+
+        db.session.add(comment)
+        db.session.commit()
+
+        flash ('✅ The Comment Has Been Successfully Updated!', 'success')
+        return redirect(url_for('edit_comment', id = bug.id, form = form, comment_id = comment_id))
+    
+    elif request.method == 'GET':
+        form.comment.data = comment.comment
+
+    if current_user.id != comment.author:
+        flash('⚠️ You Are Not Authorized To Edit This Comment! You Are Not The Author', 'danger')
+        return redirect(url_for('bugs_details', id = bug.id, form = form))
+    
+    return render_template('Edit Comment.html', id = bug.id, form = form, bug = bug)
 
 @app.errorhandler(404)
 def not_found(e):
