@@ -1,4 +1,5 @@
 import datetime
+from telnetlib import DO
 from app import app
 from flask import render_template, flash, redirect, request, url_for
 from .token import confirm_token, generate_confirmation_token
@@ -6,7 +7,8 @@ from flask_bcrypt import Bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from .email import send_email
 from .forms import LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
-from .models import db, User
+from .models import db, User, Bugs, Comments, Upvote, Downvote
+import ast
 
 bcrypt = Bcrypt(app)
 
@@ -123,3 +125,315 @@ def profile():
 def add():
     form = CreatePostForm()
     return render_template('Add Bug.html', form = form)
+
+
+# NOTE: Routes by ismailpervez below
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html')
+
+@app.errorhandler(500)
+def not_found(e):
+    return render_template('500.html')
+
+# get the user - for dashboard
+@app.route('/profile/<username>')
+def get_public_user(username):
+    # username, email, profile_pic
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return redirect(url_for('not_found'))
+
+    else:
+
+        return render_template('Profile.html', user=user)
+
+# update the user
+@app.route('/update/user/<username>', methods=['GET', 'PUT'])
+@login_required
+def update_user(username):
+    user = User.query.filter_by(username=username).first()
+    # get the form
+    # form = PostBug()
+    # form = CreatePostForm()
+    if not user:
+        return "not found"
+
+    else:
+        if request.method == 'GET':
+            '''
+            form.data.username = user.username
+            form.data.email = user.email
+            '''
+            return "update user page"
+
+        elif request.method == 'PUT':
+            '''
+            user.username = form.data.username
+            user.email = form.data.email
+            db.session.commit()
+            '''
+            return "updated user"
+
+# delete user
+@app.route('/delete/user/<username>', methods=['DELETE'])
+@login_required
+def delete_user(username):
+    user = User.query.filter_by(username=username).first()
+    
+    if not user:
+        return "not found"
+
+    else:
+        db.session.delete(user)
+        db.session.commit()
+
+        return "user deleted"
+
+# get all posts - from latest
+@app.route('/all/posts')
+def get_posts():
+    posts = Bugs.query.all()
+    return render_template('Bugs.html', bugs=posts)
+
+# create post
+@app.route('/create/post', methods=['GET', 'POST'])
+@login_required
+def create_post():
+    # form = CreateBug()
+    form = CreatePostForm()
+    if request.method == 'GET':
+        return render_template("Add Bug.html", form=form)
+
+    elif request.method == 'POST':
+        
+        bug = Bugs(
+            title=form.title.data,
+            description=form.description.data,
+            tags=str(form.tags.data.split(' '))
+        )
+
+        db.session.add(bug)
+        db.session.commit()
+        
+        return render_template("Add Bug.html", form=form)
+
+# get full post
+@app.route('/post/<post_id>')
+def get_post(post_id):
+    post = Bugs.query.get(post_id)
+
+    if not post:
+        return redirect(url_for('not_found'))
+
+    else:
+        return render_template('Bug Details.html', bug=post)
+
+# update post
+@app.route('/update/post/<post_id>', methods=['GET', 'PUT'])
+@login_required
+def update_post(post_id):
+    post = Bugs.query.get(post_id)
+    form = UpdatePostForm()
+    if not post:
+        return render_template('404.html')
+
+    else:
+        if request.method == 'GET':
+            
+            form.title.data = post.title
+            form.description.data = post.description
+            # form.tags.data = ' '.join(ast.literal_eval(post.tags))
+            form.status.data = post.status
+            
+            return render_template('Update Bug.html', form=form)
+
+        elif request.method == 'PUT':
+            
+            post.title = form.title.data
+            post.description = form.description.data
+            post.tags = str(post.tags.data.split(' '))
+            # post.status = form.status.data
+
+            db.session.commit()
+            
+            return render_template('Update Bug.html', form=form)
+
+# delete post
+@login_required
+@app.route('/delete/post/<post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    post = Bugs.query.get(post_id)
+
+    if not post:
+        return render_template('404.html')
+
+    else:
+        db.session.delete(post)
+        db.session.commit()
+
+        return render_template('Dashboard.html')
+
+# create comment
+@app.route('/create/comment/<post_id>', methods=['GET','POST'])
+@login_required
+def post_comment(post_id):
+    # form = CreateComment()
+    if request.method == 'GET':
+        '''
+        if current_user:
+            return render_template('Bug Details.html', form=form)
+        
+        else:
+            return render_template('Bug Details.html')
+        '''
+
+    elif request.method == 'POST':
+        '''
+        if form.validate_on_submit():
+            comment = Comments(
+                comment=form.content.data,
+                user_id=current_user.id,
+                bug_id=post_id
+            )
+
+            db.session.add(comment)
+            db.session.commit()
+        '''
+        return render_template('Bug Details.html', form=form) 
+
+# update comment - NOTE: i don't think its important to implement
+
+# delete comment
+@app.route('/delete/comment/<comment_id>', methods=['DELETE'])
+@login_required
+def delete_comment(comment_id):
+    comment = Comments.query.get(comment_id)
+
+    if not comment:
+        return render_template('404.html')
+
+    else:
+        db.session.delete(comment)
+        db.session.commit()
+
+        return render_template('Bug Details.html')
+
+# upvote post
+@app.route('/upvote/post/<post_id>')
+@login_required
+def like_post(post_id):
+    post = Bugs.query.get(post_id)
+
+    if not post:
+        return "post not found"
+
+    else:
+        like = Upvote.query.filter_by(user_id=current_user.id, post_id=post_id).first()
+
+        if like:
+            # dislike the post
+            db.session.delete(like)
+            db.session.commit()
+
+            return render_template('Bug Details.html')
+
+        else:
+            like = Upvote(
+                user_id=current_user.id,
+                post_id=post_id
+            )
+
+            db.session.add(like)
+            db.session.commit()
+
+        return render_template('Bug Details.html')
+
+# downvote post
+@app.route('/downvote/post/<post_id>')
+@login_required
+def like_post(post_id):
+    post = Bugs.query.get(post_id)
+
+    if not post:
+        return "post not found"
+
+    else:
+        dislike = Downvote.query.filter_by(user_id=current_user.id, post_id=post_id).first()
+
+        if dislike:
+            # dislike the post
+            db.session.delete(dislike)
+            db.session.commit()
+
+            return render_template('Bug Details.html')
+        else:
+            dislike = Downvote(
+                user_id=current_user.id,
+                post_id=post_id
+            )
+
+            db.session.add(dislike)
+            db.session.commit()
+
+        return render_template('Bug Details.html')
+
+# upvote comment
+@app.route('/upvote/comment/<comment_id>')
+@login_required
+def like_comment(comment_id):
+    post = Bugs.query.get(comment_id)
+
+    if not post:
+        return "post not found"
+
+    else:
+        like = Upvote.query.filter_by(user_id=current_user.id, comment_id=comment_id).first()
+
+        if like:
+            # dislike the post
+            db.session.delete(like)
+            db.session.commit()
+
+            return render_template('Bug Details.html')
+
+        else:
+            like = Upvote(
+                user_id=current_user.id,
+                comment_id=comment_id
+            )
+
+            db.session.add(like)
+            db.session.commit()
+
+        return render_template('Bug Details.html')
+
+# downvote comment
+@app.route('/downvote/comment/<comment_id>')
+@login_required
+def like_comment(comment_id):
+    post = Bugs.query.get(comment_id)
+
+    if not post:
+        return "post not found"
+
+    else:
+        dislike = Downvote.query.filter_by(user_id=current_user.id, comment_id=comment_id).first()
+
+        if dislike:
+            # dislike the post
+            db.session.delete(dislike)
+            db.session.commit()
+
+            return render_template('Bug Details.html')
+
+        else:
+            dislike = Downvote(
+                user_id=current_user.id,
+                comment_id=comment_id
+            )
+
+            db.session.add(dislike)
+            db.session.commit()
+
+        return render_template('Bug Details.html')
