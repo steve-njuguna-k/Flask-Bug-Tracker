@@ -418,3 +418,11 @@ a:hover {
 .btnlink{
 	color: #000000;
 }
+
+.bg-danger{
+	background-color: #dd0000;
+}
+
+.text-danger{
+	color: #dd0000;
+}

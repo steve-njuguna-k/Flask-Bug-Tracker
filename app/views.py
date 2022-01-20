@@ -450,18 +450,3 @@ def not_found(e):
 @app.errorhandler(500)
 def not_found(e):
     return render_template('500.html')
-
-# delete user
-@app.route('/delete/user/<username>', methods=['DELETE'])
-@login_required
-def delete_user(username):
-    user = User.query.filter_by(username=username).first()
-    
-    if not user:
-        return "not found"
-
-    else:
-        db.session.delete(user)
-        db.session.commit()
-
-        return "user deleted"

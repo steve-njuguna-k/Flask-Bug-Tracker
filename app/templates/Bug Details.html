@@ -42,6 +42,11 @@
                         </div>
                         <h4 class="card-title"><b>{{ bug.title }}</b></h4>
                         <p class="card-text">{{ bug.description }}</p>
+                        <p class="card-text text-muted">
+                            {% for tag in bug.tags %}
+                            <span class="badge badge-secondary">{{ tag.name }}</span>
+                            {% endfor %}
+                        </p>
                         <div class="d-flex flex-row user-info">
                             <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
                             <div class="d-flex flex-column justify-content-start ml-2">

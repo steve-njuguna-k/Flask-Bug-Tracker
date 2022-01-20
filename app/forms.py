@@ -298,4 +298,4 @@ class EditProfileForm(FlaskForm):
     linkedin_link = URLField(label = 'LinkedIn Link',validators=[DataRequired(), Length(min=6, max=500,  message='⚠️ URL length must be between %(min)d and %(max)d characters!')], render_kw={"placeholder": "LinkdIn Link"})
     facebook_link = URLField(label = 'Facebook Link',validators=[DataRequired(), Length(min=6, max=500,  message='⚠️ URL length must be between %(min)d and %(max)d characters!')], render_kw={"placeholder": "Facebook Link"})
     codewars_link = URLField(label = 'CodeWars Link',validators=[DataRequired(), Length(min=6, max=500,  message='⚠️ URL length must be between %(min)d and %(max)d characters!')], render_kw={"placeholder": "CodeWars Link"})
-    submit = SubmitField(label=('Submit'))
+    submit = SubmitField(label=('Save Changes'))
