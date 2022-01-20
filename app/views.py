@@ -144,7 +144,8 @@ def add_tags(tag):
 
 @app.route('/bugs')
 def bugs():
-    return render_template('Bugs.html')
+    bugs = Bugs.query.all()
+    return render_template('Bugs.html', bugs = bugs)
 
 @app.route('/bug-details')
 def bugs_details():
