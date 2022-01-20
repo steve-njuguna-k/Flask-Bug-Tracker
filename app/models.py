@@ -55,9 +55,7 @@ class Bugs(db.Model):
     comment = db.relationship('Comments', backref='bug_comment', lazy='dynamic')
     tags = db.relationship('Tags',secondary=bug_tags, back_populates="bugs")
     author = db.Column(db.Integer,db.ForeignKey('users.id'))
-    # supposed to be status - String
-    # unresolved, resolved, in progress
-    status = db.Column(db.String, nullable=False, default='unresolved')
+    bug_status = db.Column(db.String, nullable=False, default='Unresolved')
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     created_on = db.Column(db.DateTime, default = datetime.datetime.utcnow())
     updated_on = db.Column(db.DateTime, nullable=True)

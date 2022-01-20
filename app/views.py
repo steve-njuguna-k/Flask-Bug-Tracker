@@ -352,7 +352,7 @@ def like_post(post_id):
 # downvote post
 @app.route('/downvote/post/<post_id>')
 @login_required
-def like_post(post_id):
+def dislike_post(post_id):
     post = Bugs.query.get(post_id)
 
     if not post:
@@ -411,7 +411,7 @@ def like_comment(comment_id):
 # downvote comment
 @app.route('/downvote/comment/<comment_id>')
 @login_required
-def like_comment(comment_id):
+def dislike_comment(comment_id):
     post = Bugs.query.get(comment_id)
 
     if not post:
