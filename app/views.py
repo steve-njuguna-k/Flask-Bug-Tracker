@@ -147,9 +147,11 @@ def bugs():
     bugs = Bugs.query.all()
     return render_template('Bugs.html', bugs = bugs)
 
-@app.route('/bug-details')
-def bugs_details():
-    return render_template('Bug Details.html')
+@app.route('/bug/<int:id>/bug-details')
+def bugs_details(id):
+    bugs = Bugs.query.all()
+    bug = Bugs.query.filter_by(id = id).first()
+    return render_template('Bug Details.html', bug = bug, bugs = bugs)
 
 @app.route('/profile')
 def profile():

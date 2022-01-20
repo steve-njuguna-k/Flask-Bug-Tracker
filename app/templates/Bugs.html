@@ -10,7 +10,7 @@
     <h2>All Bugs</h2>
     <br>
     <div class="row">
-        {% for bug in bugs %}
+        {% for bug in bugs[:10] %}
         <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
             <div class="card">
                 <div class="card-body">
@@ -24,9 +24,11 @@
                         </div>
                     </div>
                     <br>
-                    <h5 class="card-title"><b>{{ bug.title }}</b></h5>
+                    <a href="/bug/{{bug.id}}/bug-details">
+                        <h5 class="card-title"><b>{{ bug.title }}</b></h5>
+                    </a>
                     <p class="card-text">{{ bug.description[:100] + " ..." }}</p>
-                    <a href="#" class="text-primary">More Information</a>
+                    <a href="/bug/{{bug.id}}/bug-details" class="text-primary">More Information</a>
                 </div>
             </div>
         </div>
