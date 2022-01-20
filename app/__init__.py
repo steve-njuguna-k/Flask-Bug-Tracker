@@ -6,6 +6,7 @@ from flask_mail import Mail
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 from flask_login import LoginManager
+from flask_heroku import Heroku
 
 mail = Mail()
 login = LoginManager()
@@ -15,6 +16,7 @@ app = Flask(__name__)
 load_dotenv('.env')
 app.config.from_pyfile('config.py')
 
+heroku = Heroku(app)
 migrate = Migrate(app, db)
 
 db.init_app(app)
