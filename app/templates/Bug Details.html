@@ -45,11 +45,16 @@
                         <div class="d-flex flex-row user-info">
                             <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
                             <div class="d-flex flex-column justify-content-start ml-2">
-                                <a href="#">
+                                <a href="/author/{{ bug.user_bug.id }}">
                                     <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
                                 </a>
                                 <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y, %I:%M %p') }}</span>
                             </div>
+                        </div>
+                        <br>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-link text-success" href="/bug/{{ bug.id }}/like"><i class="fa fa-thumbs-up"></i> ({{bug.post_upvotes|length}}) </a>
+                            <a class="btn btn-sm btn-link text-danger" href="/bug/{{ bug.id }}/dislike"><i class="fa fa-thumbs-down"></i> ({{bug.post_downvotes|length}}) </a>
                         </div>
                         {% if bug.bug_status == 'Resolved' %}
                         <h5><span class="badge badge-success float-right">{{ bug.bug_status }}</span></h5>
@@ -68,7 +73,7 @@
                             <div class="d-flex flex-row user-info">
                                 <img class="rounded" src="{{ comment.user_comment.profile_pic}}" height="50" width="50">
                                 <div class="d-flex flex-column justify-content-start ml-2">
-                                    <a href="#">
+                                    <a href="/author/{{ comment.user_comment.id }}">
                                         <span class="d-block font-weight-bold text-primary">{{ comment.user_comment.username }}</span>
                                     </a>
                                     <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ comment.date_published.strftime('%d/%m/%Y, %I:%M %p') }}</span>
@@ -105,10 +110,12 @@
                     <div class="card-body">
                     <center><img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="100" width="100"></center>
                     <br>
-                    <h3 class="card-subtitle mb-2 text-primary text-center"><b>{{ bug.user_bug.username }}</b></h3>
+                    <a href="/author/{{ bug.user_bug.id }}">
+                        <h3 class="card-subtitle mb-2 text-primary text-center"><b>{{ bug.user_bug.username }}</b></h3>
+                    </a>
                     <center><span class="date text-black" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> Member Since: {{ bug.user_bug.registered_on.strftime('%d/%m/%Y, %I:%M %p') }}</span></center>
                     <p class="card-text text-center py-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                    <center><a href="#" class="btn btn-primary btn-sm">Visit Profile</a></center>
+                    <center><a href="/author/{{ bug.user_bug.id }}" class="btn btn-primary btn-sm">Visit Profile</a></center>
                     </div>
                 </div>
                 <br>
@@ -119,7 +126,7 @@
                             <div class="d-flex flex-row user-info">
                                 <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
                                 <div class="d-flex flex-column justify-content-start ml-2">
-                                    <a href="#">
+                                    <a href="/author/{{ bug.user_bug.id }}">
                                         <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
                                     </a>
                                     <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y, %I:%M %p') }}</span>
@@ -130,7 +137,10 @@
                                 <h5 class="card-title"><b>{{ bug.title }}</b></h5>
                             </a>
                             <p class="card-text">{{ bug.description[:100] + " ..." }}</p>
-                            <a href="/bug/{{bug.id}}/bug-details" class="text-primary">More Information</a>
+                            <div class="btn-group">
+                                <a class="btn btn-sm btn-link text-success" href="/bug/{{ bug.id }}/like"><i class="fa fa-thumbs-up"></i> ({{bug.post_upvotes|length}}) </a>
+                                <a class="btn btn-sm btn-link text-danger" href="/bug/{{ bug.id }}/dislike"><i class="fa fa-thumbs-down"></i> ({{bug.post_downvotes|length}}) </a>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

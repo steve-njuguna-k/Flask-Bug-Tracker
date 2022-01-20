@@ -9,7 +9,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from .email import send_email
 from .forms import AddCommentsForm, EditCommentsForm, LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
-from .models import db, User, Bugs, Comments, Upvote, Downvote, Tags
+from .models import db, User, Bugs, Comments, CommentUpvote, CommentDownvote, Tags, PostUpvote, PostDownvote
 import ast
 
 from app import models
@@ -204,14 +204,20 @@ def delete_post(id):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    bugs = Bugs.query.filter_by(author = current_user._get_current_object().id)
+    bugs = Bugs.query.filter_by(author = current_user._get_current_object().id).all()
     return render_template('Dashboard.html', bugs = bugs)
 
 @app.route('/profile')
 def profile():
-    bugs = Bugs.query.filter_by(author = current_user._get_current_object().id)
+    bugs = Bugs.query.filter_by(author = current_user._get_current_object().id).all()
     user = current_user._get_current_object()
     return render_template('Profile.html', bugs = bugs, user = user)
+
+@app.route('/author/<int:id>')
+def author(id):
+    user = User.query.get(id)
+    bugs = Bugs.query.filter_by(author = current_user._get_current_object().id).all()
+    return render_template('Profile.html', user = user, bugs = bugs)
 
 # create comment
 @app.route('/bug/<int:id>/comment', methods = ['GET', 'POST'])
@@ -291,14 +297,14 @@ def like_comment(id, comment_id):
         return "post not found"
 
     else:
-        like = Upvote.query.filter_by(user_id=current_user.id, bug_id = bug.id, comment_id=comment_id).first()
+        like = CommentUpvote.query.filter_by(user_id=current_user.id, bug_id = bug.id, comment_id=comment_id).first()
 
         if like:
             flash('⚠️ You Can Only Like Once!', 'danger')
             return render_template('Bug Details.html', bug = bug, comments = comments)
 
         else:
-            like = Upvote(
+            like = CommentUpvote(
                 user_id=current_user.id,
                 bug_id = bug.id,
                 comment_id = comment_id
@@ -321,14 +327,14 @@ def dislike_comment(id, comment_id):
         return "post not found"
 
     else:
-        like = Downvote.query.filter_by(user_id=current_user.id, bug_id = bug.id, comment_id=comment_id).first()
+        like = CommentDownvote.query.filter_by(user_id=current_user.id, bug_id = bug.id, comment_id=comment_id).first()
 
         if like:
             flash('⚠️ You Can Only Dislike Once!', 'danger')
-            return render_template('Bug Details.html', bug = bug, comments = comments)
+            return render_template('Bug Details.html', bug = bug, comments = comments, bug_id = id, comment_id = comment_id)
 
         else:
-            like = Downvote(
+            like = CommentDownvote(
                 user_id=current_user.id,
                 bug_id = bug.id,
                 comment_id = comment_id
@@ -338,8 +344,64 @@ def dislike_comment(id, comment_id):
             db.session.commit()
 
             flash ('✅ You Have Disliked That Comment!', 'success')
+            return render_template('Bug Details.html', bug = bug, comments = comments, bug_id = id, comment_id = comment_id)
+
+@app.route('/bug/<int:id>/like')
+@login_required
+def like_post(id):
+    bug = Bugs.query.get(id)
+    comments = Comments.query.filter_by(bug_id = id).order_by(desc(Comments.date_published)).all()
+
+    if not bug:
+        return "post not found"
+
+    else:
+        like = PostUpvote.query.filter_by(user_id=current_user.id, bug_id = bug.id).first()
+
+        if like:
+            flash('⚠️ You Can Only Like Once!', 'danger')
             return render_template('Bug Details.html', bug = bug, comments = comments)
 
+        else:
+            like = PostUpvote(
+                user_id=current_user.id,
+                bug_id = bug.id
+            )
+
+            db.session.add(like)
+            db.session.commit()
+
+            flash ('✅ You Have Liked That Post!', 'success')
+            return render_template('Bug Details.html', bug = bug, comments = comments)
+
+# downvote comment
+@app.route('/bug/<int:id>/dislike')
+@login_required
+def dislike_post(id):
+    bug = Bugs.query.get(id)
+    comments = Comments.query.filter_by(bug_id = id).order_by(desc(Comments.date_published)).all()
+
+    if not bug:
+        return "post not found"
+
+    else:
+        like = PostDownvote.query.filter_by(user_id=current_user.id, bug_id = bug.id).first()
+
+        if like:
+            flash('⚠️ You Can Only Dislike Once!', 'danger')
+            return render_template('Bug Details.html', bug = bug, comments = comments, bug_id = id)
+
+        else:
+            like = PostDownvote(
+                user_id=current_user.id,
+                bug_id = bug.id
+            )
+
+            db.session.add(like)
+            db.session.commit()
+
+            flash ('✅ You Have Disliked That Post!', 'success')
+            return render_template('Bug Details.html', bug = bug, comments = comments, bug_id = id)
 
 @app.errorhandler(404)
 def not_found(e):
@@ -403,64 +465,64 @@ def delete_user(username):
 
         return "user deleted"
 
-# upvote post
-@app.route('/upvote/post/<post_id>')
-@login_required
-def like_post(post_id):
-    post = Bugs.query.get(post_id)
+# # upvote post
+# @app.route('/upvote/post/<post_id>')
+# @login_required
+# def like_post(post_id):
+#     post = Bugs.query.get(post_id)
 
-    if not post:
-        return "post not found"
+#     if not post:
+#         return "post not found"
 
-    else:
-        like = Upvote.query.filter_by(user_id=current_user.id, post_id=post_id).first()
+#     else:
+#         like = Upvote.query.filter_by(user_id=current_user.id, post_id=post_id).first()
 
-        if like:
-            # dislike the post
-            db.session.delete(like)
-            db.session.commit()
+#         if like:
+#             # dislike the post
+#             db.session.delete(like)
+#             db.session.commit()
 
-            return render_template('Bug Details.html')
+#             return render_template('Bug Details.html')
 
-        else:
-            like = Upvote(
-                user_id=current_user.id,
-                post_id=post_id
-            )
+#         else:
+#             like = Upvote(
+#                 user_id=current_user.id,
+#                 post_id=post_id
+#             )
 
-            db.session.add(like)
-            db.session.commit()
+#             db.session.add(like)
+#             db.session.commit()
 
-        return render_template('Bug Details.html')
+#         return render_template('Bug Details.html')
 
-# downvote post
-@app.route('/downvote/post/<post_id>')
-@login_required
-def dislike_post(post_id):
-    post = Bugs.query.get(post_id)
+# # downvote post
+# @app.route('/downvote/post/<post_id>')
+# @login_required
+# def dislike_post(post_id):
+#     post = Bugs.query.get(post_id)
 
-    if not post:
-        return "post not found"
+#     if not post:
+#         return "post not found"
 
-    else:
-        dislike = Downvote.query.filter_by(user_id=current_user.id, post_id=post_id).first()
+#     else:
+#         dislike = Downvote.query.filter_by(user_id=current_user.id, post_id=post_id).first()
 
-        if dislike:
-            # dislike the post
-            db.session.delete(dislike)
-            db.session.commit()
+#         if dislike:
+#             # dislike the post
+#             db.session.delete(dislike)
+#             db.session.commit()
 
-            return render_template('Bug Details.html')
-        else:
-            dislike = Downvote(
-                user_id=current_user.id,
-                post_id=post_id
-            )
+#             return render_template('Bug Details.html')
+#         else:
+#             dislike = Downvote(
+#                 user_id=current_user.id,
+#                 post_id=post_id
+#             )
 
-            db.session.add(dislike)
-            db.session.commit()
+#             db.session.add(dislike)
+#             db.session.commit()
 
-        return render_template('Bug Details.html')
+#         return render_template('Bug Details.html')
 
 # # upvote comment
 # @app.route('/upvote/comment/<comment_id>')

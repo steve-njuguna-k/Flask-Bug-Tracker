@@ -19,6 +19,15 @@ class User(UserMixin, db.Model):
     bugs = db.relationship('Bugs',backref = 'user_bug',lazy = "dynamic")
     comments = db.relationship('Comments',backref = 'user_comment',lazy = "dynamic")
     profile_pic = db.Column(db.String(500), nullable=False, default='https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png')
+    bio = db.Column(db.String(1000), nullable=True)
+    profession = db.Column(db.String(100), nullable=True)
+    country = db.Column(db.String(50), nullable=True)
+    website_link = db.Column(db.String(500), nullable=True)
+    github_link = db.Column(db.String(500), nullable=True)
+    twitter_link = db.Column(db.String(500), nullable=True)
+    linkedin_link = db.Column(db.String(500), nullable=True)
+    facebook_link = db.Column(db.String(500), nullable=True)
+    codewars_link = db.Column(db.String(500), nullable=True)
     registered_on = db.Column(db.DateTime, nullable=False)
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
@@ -58,8 +67,10 @@ class Bugs(db.Model):
     bug_status = db.Column(db.String, nullable=False, default='Unresolved')
     created_on = db.Column(db.DateTime, default = datetime.datetime.utcnow())
     updated_on = db.Column(db.DateTime, nullable=True)
-    upvotes = db.relationship('Upvote', backref='bug_upvotes')
-    downvotes = db.relationship('Downvote', backref='bug_downvotes')
+    comment_upvotes = db.relationship('CommentUpvote', backref='bug_comment_upvotes')
+    comment_downvotes = db.relationship('CommentDownvote', backref='bug_comment_downvotes')
+    post_upvotes = db.relationship('PostUpvote', backref='bug_upvotes')
+    post_downvotes = db.relationship('PostDownvote', backref='bug_downvotes')
 
     def __init__(self, title, description):
         self.title = title
@@ -77,8 +88,8 @@ class Comments(db.Model):
     bug_id = db.Column(db.Integer, db.ForeignKey('bugs.id'))
     date_published = db.Column(db.DateTime, default = datetime.datetime.utcnow)
     author = db.Column(db.Integer,db.ForeignKey('users.id'))
-    upvotes = db.relationship('Upvote', backref='comment_upvotes')
-    downvotes = db.relationship('Downvote', backref='comment_downvotes')
+    upvotes = db.relationship('CommentUpvote', backref='comment_upvotes')
+    downvotes = db.relationship('CommentDownvote', backref='comment_downvotes')
 
     def __init__(self, comment, bug_id, author):
         self.comment = comment
@@ -99,34 +110,44 @@ class Tags(db.Model):
     def __repr__(self):
         return "<{}:{}>".format(self.id, self.name)
 
-class Upvote(db.Model):
-    __tablename__ = 'upvotes'
+class CommentUpvote(db.Model):
+    __tablename__ = 'comment_upvotes'
 
     id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
     bug_id = db.Column(db.Integer,db.ForeignKey('bugs.id'))
     comment_id = db.Column(db.Integer,db.ForeignKey('comments.id'))
-
-    @classmethod
-    def get_upvotes(cls,id):
-        upvote = Upvote.query.filter_by(bug_id=id).all()
-        return upvote
 
     def __repr__(self):
         return f'{self.user_id}:{self.bug_id}'
 
-class Downvote(db.Model):
-    __tablename__ = 'downvotes'
+class CommentDownvote(db.Model):
+    __tablename__ = 'comment_downvotes'
 
     id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
     bug_id = db.Column(db.Integer,db.ForeignKey('bugs.id'))
     comment_id = db.Column(db.Integer,db.ForeignKey('comments.id'))
-    
-    @classmethod
-    def get_downvotes(cls,id):
-        downvote = Downvote.query.filter_by(bug_id=id).all()
-        return downvote
+
+    def __repr__(self):
+        return f'{self.user_id}:{self.bug_id}'
+
+class PostUpvote(db.Model):
+    __tablename__ = 'post_upvotes'
+
+    id = db.Column(db.Integer,primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+    bug_id = db.Column(db.Integer,db.ForeignKey('bugs.id'))
+
+    def __repr__(self):
+        return f'{self.user_id}:{self.bug_id}'
+
+class PostDownvote(db.Model):
+    __tablename__ = 'post_downvotes'
+
+    id = db.Column(db.Integer,primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
+    bug_id = db.Column(db.Integer,db.ForeignKey('bugs.id'))
 
     def __repr__(self):
         return f'{self.user_id}:{self.bug_id}'

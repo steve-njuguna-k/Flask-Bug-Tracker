@@ -41,7 +41,10 @@
                         <h5 class="card-title"><b>{{ bug.title }}</b></h5>
                     </a>
                     <p class="card-text">{{ bug.description[:100] + " ..." }}</p>
-                    <a href="/bug/{{bug.id}}/bug-details" class="text-primary">More Information</a>
+                    <div class="btn-group">
+                        <a class="btn btn-sm btn-link text-success" href="/bug/{{ bug.id }}/like"><i class="fa fa-thumbs-up"></i> ({{bug.post_upvotes|length}}) </a>
+                        <a class="btn btn-sm btn-link text-danger" href="/bug/{{ bug.id }}/dislike"><i class="fa fa-thumbs-down"></i> ({{bug.post_downvotes|length}}) </a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -10,29 +10,42 @@
     <h2>All Bugs</h2>
     <br>
     <div class="row">
-        {% for bug in bugs[:10] %}
-        <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex flex-row user-info">
-                        <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
-                        <div class="d-flex flex-column justify-content-start ml-2">
-                            <a href="#">
-                                <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
-                            </a>
-                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y, %I:%M %p') }}</span>
+        {% if bugs %}
+            {% for bug in bugs[:10] %}
+            <div class="col-sm-4 mb-3 d-flex align-items-stretch" style="margin-bottom: 20px;">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-row user-info">
+                            <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
+                            <div class="d-flex flex-column justify-content-start ml-2">
+                                <a href="#">
+                                    <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
+                                </a>
+                                <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y, %I:%M %p') }}</span>
+                            </div>
+                        </div>
+                        <br>
+                        <a href="/bug/{{bug.id}}/bug-details">
+                            <h5 class="card-title"><b>{{ bug.title }}</b></h5>
+                        </a>
+                        <p class="card-text">{{ bug.description[:100] + " ..." }}</p>
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-link text-success" href="/bug/{{ bug.id }}/like"><i class="fa fa-thumbs-up"></i> ({{bug.post_upvotes|length}}) </a>
+                            <a class="btn btn-sm btn-link text-danger" href="/bug/{{ bug.id }}/dislike"><i class="fa fa-thumbs-down"></i> ({{bug.post_downvotes|length}}) </a>
                         </div>
                     </div>
-                    <br>
-                    <a href="/bug/{{bug.id}}/bug-details">
-                        <h5 class="card-title"><b>{{ bug.title }}</b></h5>
-                    </a>
-                    <p class="card-text">{{ bug.description[:100] + " ..." }}</p>
-                    <a href="/bug/{{bug.id}}/bug-details" class="text-primary">More Information</a>
                 </div>
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            <center>
+                <div class="text-center" style="margin-top: 70px;">
+                    <i class="far fa-bug fa-5x"></i>
+                    <br>
+                    <h3 class="text-center py-4">No Bug Posts</h3>
+                </div>
+            </center>
+        {% endif %}
     </div>
 </div>
 
