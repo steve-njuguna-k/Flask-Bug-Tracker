@@ -5,8 +5,6 @@
 </div>
 
 {% block content %}
-
-<div class="container-fluid" style="margin-top: 30px;">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -19,104 +17,31 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
-    <div class="row">
-        <div class="col-sm-8">
-            <h4><i class="fas fa-bug"></i> Bug Details</h4>
-            <div class="card" style="margin-bottom: 50px;">
-                <div class="card-body">
-                    <div class="float-right">
-                        {% if current_user.id == bug.author %}
-                            <a class="float-left" style="margin-right: 5px;" href="/bug/{{bug.id}}/edit">
-                                <button class="btn btn-outline-warning btn-sm"><i class="far fa-edit"></i> Edit</button>
-                            </a>
-                            <a href="#" style="margin-right: 5px;">
-                                <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#deleteBug{{bug.id}}"><i class="far fa-trash"></i> Delete</button>
-                            </a>
-                            <a class="float-right" href="/bug/{{ bug.id }}/comment">
-                            <button class="btn btn-outline-primary btn-sm"><i class="far fa-comment-alt"></i> Comment</button>
-                        </a>
-                        {% else %}
-                        <a class="float-right" href="/bug/{{ bug.id }}/comment">
-                            <button class="btn btn-outline-primary btn-sm"><i class="far fa-comment-alt"></i> Comment</button>
-                        </a>
-                        {% endif %}
-                    </div>
-                    <h4 class="card-title"><b>{{ bug.title }}</b></h4>
-                    <p class="card-text">{{ bug.description }}</p>
-                    <div class="d-flex flex-row user-info">
-                        <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
-                        <div class="d-flex flex-column justify-content-start ml-2">
-                            <a href="#">
-                                <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
-                            </a>
-                            <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y, %I:%M %p') }}</span>
-                        </div>
-                    </div>
-                    {% if bug.bug_status == 'Resolved' %}
-                    <h5><span class="badge badge-success float-right">{{ bug.bug_status }}</span></h5>
-                    {% elif bug.bug_status == 'In Progress' %}
-                    <h5><span class="badge badge-warning float-right">{{ bug.bug_status }}</span></h5>
-                    {% else %}
-                    <h5><span class="badge badge-danger float-right">{{ bug.bug_status }}</span></h5>
-                    {% endif %}
-                </div>
-            </div>
-            <h2 style="margin-top: 50px;">Comments</h2>
-            {% if comments %}
-                {% for comment in comments %}
-                <div class="card" style="margin-bottom: 20px;">
+    <div class="container-fluid" style="margin-top: 30px;">
+        <div class="row">
+            <div class="col-sm-8">
+                <h4><i class="fas fa-bug"></i> Bug Details</h4>
+                <div class="card" style="margin-bottom: 50px;">
                     <div class="card-body">
-                        <div class="d-flex flex-row user-info">
-                            <img class="rounded" src="{{ comment.user_comment.profile_pic}}" height="50" width="50">
-                            <div class="d-flex flex-column justify-content-start ml-2">
-                                <a href="#">
-                                    <span class="d-block font-weight-bold text-primary">{{ comment.user_comment.username }}</span>
+                        <div class="float-right">
+                            {% if current_user.id == bug.author %}
+                                <a class="float-left" style="margin-right: 5px;" href="/bug/{{bug.id}}/edit">
+                                    <button class="btn btn-outline-warning btn-sm"><i class="far fa-edit"></i> Edit</button>
                                 </a>
-                                <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ comment.date_published.strftime('%d/%m/%Y, %I:%M %p') }}</span>
-                            </div>
+                                <a href="#" style="margin-right: 5px;">
+                                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#deleteBug{{bug.id}}"><i class="far fa-trash"></i> Delete</button>
+                                </a>
+                                <a class="float-right" href="/bug/{{ bug.id }}/comment">
+                                <button class="btn btn-outline-primary btn-sm"><i class="far fa-comment-alt"></i> Comment</button>
+                            </a>
+                            {% else %}
+                            <a class="float-right" href="/bug/{{ bug.id }}/comment">
+                                <button class="btn btn-outline-primary btn-sm"><i class="far fa-comment-alt"></i> Comment</button>
+                            </a>
+                            {% endif %}
                         </div>
-                        <br>
-                        <p class="card-text">{{ comment.comment }}</p> 
-                        <div class="btn-group">
-                            <a class="btn btn-sm btn-success" href="/bug/{{ bug.id }}/comment/{{ comment.id }}/like"><i class="fa fa-thumbs-up"></i> ({{comment.upvotes|length}}) </a>
-                            <a class="btn btn-sm btn-danger" href="/bug/{{ bug.id }}/comment/{{ comment.id }}/dislike"><i class="fa fa-thumbs-down"></i> (0) </a>
-                        </div>
-                        {% if current_user.id == bug.author %}
-                        <a href="{{url_for('delete_comment', id = bug.id, comment_id = comment.id)}}" class="float-right">
-                            <button type="submit" id="dislikes" class="btn btn-sm btn-outline-danger" ><i class="far fa-trash"></i> Delete</button>
-                        </a>
-                        <a href="/bug/{{ bug.id }}/comment/{{ comment.id }}/edit" class="float-right" style="margin-right: 5px;">
-                            <button class="btn btn-outline-dark btn-sm"><i class="far fa-edit"></i> Edit</button>
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <div class="text-center" style="margin-top: 70px;">
-                    <i class="far fa-comments fa-5x"></i>
-                    <br>
-                    <h3 class="text-center py-4">Be The First To Help</h3>
-                </div>
-            {% endif %}
-        </div>
-        <div class="col-sm-4">
-            <h4><i class="fas fa-user-circle"></i> Author Information</h4>
-            <div class="card">
-                <div class="card-body">
-                <center><img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="100" width="100"></center>
-                <br>
-                <h3 class="card-subtitle mb-2 text-primary text-center"><b>{{ bug.user_bug.username }}</b></h3>
-                <center><span class="date text-black" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> Member Since: {{ bug.user_bug.registered_on.strftime('%d/%m/%Y, %I:%M %p') }}</span></center>
-                <p class="card-text text-center py-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                <center><a href="#" class="btn btn-primary btn-sm">Visit Profile</a></center>
-                </div>
-            </div>
-            <br>
-            <h4><i class="fas fa-bug"></i> Other Bugs</h4>
-            {% for bug in bugs %}
-                <div class="card" style="margin-bottom: 10px;">
-                    <div class="card-body">
+                        <h4 class="card-title"><b>{{ bug.title }}</b></h4>
+                        <p class="card-text">{{ bug.description }}</p>
                         <div class="d-flex flex-row user-info">
                             <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
                             <div class="d-flex flex-column justify-content-start ml-2">
@@ -126,48 +51,122 @@
                                 <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y, %I:%M %p') }}</span>
                             </div>
                         </div>
-                        <br>
-                        <a href="/bug/{{bug.id}}/bug-details">
-                            <h5 class="card-title"><b>{{ bug.title }}</b></h5>
-                        </a>
-                        <p class="card-text">{{ bug.description[:100] + " ..." }}</p>
-                        <a href="/bug/{{bug.id}}/bug-details" class="text-primary">More Information</a>
+                        {% if bug.bug_status == 'Resolved' %}
+                        <h5><span class="badge badge-success float-right">{{ bug.bug_status }}</span></h5>
+                        {% elif bug.bug_status == 'In Progress' %}
+                        <h5><span class="badge badge-warning float-right">{{ bug.bug_status }}</span></h5>
+                        {% else %}
+                        <h5><span class="badge badge-danger float-right">{{ bug.bug_status }}</span></h5>
+                        {% endif %}
                     </div>
                 </div>
-            {% endfor %}
-        </div>       
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="deleteBug{{bug.id}}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="deleteBugLabel{{bug.id}}" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" id="deleteBugLabel{{bug.id}}">Delete Bug Post</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-            <div class="modal-body">
-                <p>Are you you want to delete the bug post? <span class="text-danger">(This can't be undone)</span></p>
+                <h2 style="margin-top: 50px;">Comments</h2>
+                {% if comments %}
+                    {% for comment in comments %}
+                    <div class="card" style="margin-bottom: 20px;">
+                        <div class="card-body">
+                            <div class="d-flex flex-row user-info">
+                                <img class="rounded" src="{{ comment.user_comment.profile_pic}}" height="50" width="50">
+                                <div class="d-flex flex-column justify-content-start ml-2">
+                                    <a href="#">
+                                        <span class="d-block font-weight-bold text-primary">{{ comment.user_comment.username }}</span>
+                                    </a>
+                                    <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ comment.date_published.strftime('%d/%m/%Y, %I:%M %p') }}</span>
+                                </div>
+                            </div>
+                            <br>
+                            <p class="card-text">{{ comment.comment }}</p> 
+                            <div class="btn-group">
+                                <a class="btn btn-sm btn-link text-success" href="/bug/{{ bug.id }}/comment/{{ comment.id }}/like"><i class="fa fa-thumbs-up"></i> ({{comment.upvotes|length}}) </a>
+                                <a class="btn btn-sm btn-link text-danger" href="/bug/{{ bug.id }}/comment/{{ comment.id }}/dislike"><i class="fa fa-thumbs-down"></i> (0) </a>
+                            </div>
+                            {% if current_user.id == bug.author %}
+                            <a href="{{url_for('delete_comment', id = bug.id, comment_id = comment.id)}}" class="float-right">
+                                <button type="submit" id="dislikes" class="btn btn-sm btn-link text-danger" ><i class="far fa-trash"></i> Delete</button>
+                            </a>
+                            <a href="/bug/{{ bug.id }}/comment/{{ comment.id }}/edit" class="float-right" style="margin-right: 5px;">
+                                <button class="btn btn-link btn-sm text-dark"><i class="far fa-edit"></i> Edit</button>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center" style="margin-top: 70px;">
+                        <i class="far fa-comments fa-5x"></i>
+                        <br>
+                        <h3 class="text-center py-4">Be The First To Help</h3>
+                    </div>
+                {% endif %}
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-                <a href="/bug/{{ bug.id }}/delete">
-                    <button type="submit" class="btn btn-danger btn-sm"><i class="far fa-trash"></i> Delete</button>
-                </a>
+            <div class="col-sm-4">
+                <h4><i class="fas fa-user-circle"></i> Author Information</h4>
+                <div class="card">
+                    <div class="card-body">
+                    <center><img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="100" width="100"></center>
+                    <br>
+                    <h3 class="card-subtitle mb-2 text-primary text-center"><b>{{ bug.user_bug.username }}</b></h3>
+                    <center><span class="date text-black" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> Member Since: {{ bug.user_bug.registered_on.strftime('%d/%m/%Y, %I:%M %p') }}</span></center>
+                    <p class="card-text text-center py-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    <center><a href="#" class="btn btn-primary btn-sm">Visit Profile</a></center>
+                    </div>
+                </div>
+                <br>
+                <h4><i class="fas fa-bug"></i> Other Bugs</h4>
+                {% for bug in bugs %}
+                    <div class="card" style="margin-bottom: 10px;">
+                        <div class="card-body">
+                            <div class="d-flex flex-row user-info">
+                                <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
+                                <div class="d-flex flex-column justify-content-start ml-2">
+                                    <a href="#">
+                                        <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
+                                    </a>
+                                    <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y, %I:%M %p') }}</span>
+                                </div>
+                            </div>
+                            <br>
+                            <a href="/bug/{{bug.id}}/bug-details">
+                                <h5 class="card-title"><b>{{ bug.title }}</b></h5>
+                            </a>
+                            <p class="card-text">{{ bug.description[:100] + " ..." }}</p>
+                            <a href="/bug/{{bug.id}}/bug-details" class="text-primary">More Information</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>       
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteBug{{bug.id}}" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="deleteBugLabel{{bug.id}}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="deleteBugLabel{{bug.id}}">Delete Bug Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                <div class="modal-body">
+                    <p>Are you you want to delete the bug post? <span class="text-danger">(This can't be undone)</span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <a href="/bug/{{ bug.id }}/delete">
+                        <button type="submit" class="btn btn-danger btn-sm"><i class="far fa-trash"></i> Delete</button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-{% block footer %}
-	<div class="container">
-		<div id="footer">
-			<p class="text-center">© 2022 Bug Tracker</p>
-		</div>
-	</div>
-{% endblock %}
+    {% block footer %}
+        <div class="container">
+            <div id="footer">
+                <p class="text-center">© 2022 Bug Tracker</p>
+            </div>
+        </div>
+    {% endblock %}
 
 {% endblock %}
