@@ -14,9 +14,14 @@
                 <div class="card-body">
                 <center><img class="rounded" src="{{ user.profile_pic }}" height="100" width="100"></center>
                 <br>
-                <h3 class="card-subtitle mb-2 text-primary text-center"><b>{{ user.username }}</b></h3>
+                <h1 class="card-subtitle mb-2 text-primary text-center"><b>{{ user.username }}</b></h1>
+                {% if user.profession %}
+                <h3 class="card-subtitle mb-2 text-muted text-center"><b>{{ user.profession }}</b></h3>
+                {% endif %}
                 <center><span class="date text-black" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> Member Since: {{ user.registered_on.strftime('%d/%m/%Y') }}</span></center>
-                <p class="card-text text-center py-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                {% if user.bio %}
+                <p class="card-text text-center py-3">{{ user.bio[:200] }}</p>
+                {% endif %}
                 </div>
             </div>
         </div>

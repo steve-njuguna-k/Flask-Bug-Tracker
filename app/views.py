@@ -451,34 +451,6 @@ def not_found(e):
 def not_found(e):
     return render_template('500.html')
 
-
-# update the user
-@app.route('/update/user/<username>', methods=['GET', 'PUT'])
-@login_required
-def update_user(username):
-    user = User.query.filter_by(username=username).first()
-    # get the form
-    # form = PostBug()
-    # form = CreatePostForm()
-    if not user:
-        return "not found"
-
-    else:
-        if request.method == 'GET':
-            '''
-            form.data.username = user.username
-            form.data.email = user.email
-            '''
-            return "update user page"
-
-        elif request.method == 'PUT':
-            '''
-            user.username = form.data.username
-            user.email = form.data.email
-            db.session.commit()
-            '''
-            return "updated user"
-
 # delete user
 @app.route('/delete/user/<username>', methods=['DELETE'])
 @login_required
