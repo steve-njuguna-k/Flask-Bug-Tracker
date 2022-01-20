@@ -74,14 +74,16 @@ class Comments(db.Model):
 
     id = db.Column(db.Integer,primary_key=True)
     comment = db.Column(db.String(1000), nullable=False)
-    bug = db.Column(db.Integer, db.ForeignKey('bugs.id'))
+    bug_id = db.Column(db.Integer, db.ForeignKey('bugs.id'))
     date_published = db.Column(db.DateTime, default = datetime.datetime.utcnow)
-    user = db.Column(db.Integer,db.ForeignKey('users.id'))
+    author = db.Column(db.Integer,db.ForeignKey('users.id'))
     upvotes = db.relationship('Upvote', backref='comment_upvotes')
     downvotes = db.relationship('Downvote', backref='comment_downvotes')
 
-    def __init__(self, comment):
+    def __init__(self, comment, bug_id, author):
         self.comment = comment
+        self.bug_id = bug_id
+        self.author = author
 
     def __repr__(self):
         return '<Comment: {}>'.format(self.comment)

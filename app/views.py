@@ -6,7 +6,7 @@ from .token import confirm_token, generate_confirmation_token
 from flask_bcrypt import Bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from .email import send_email
-from .forms import LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
+from .forms import CommentsForm, LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
 from .models import db, User, Bugs, Comments, Upvote, Downvote, Tags
 import ast
 
@@ -123,7 +123,7 @@ def add_bug():
         db.session.add(bug)
         db.session.commit()
         flash ('✅ New Bug Post Successfully Created!', 'success')
-        return redirect(url_for('add_bug'))
+        return redirect(url_for('dashboard'))
         
     return render_template("Add Bug.html", form = form)
 
@@ -142,11 +142,14 @@ def bugs():
     bugs = Bugs.query.all()
     return render_template('Bugs.html', bugs = bugs)
 
-@app.route('/bug/<int:id>/bug-details')
+@app.route('/bug/<int:id>/bug-details', methods = ['POST', 'GET'])
 def bugs_details(id):
+    form = CommentsForm()
+    comments = Comments.query.filter_by(bug_id = id).all()
     bugs = Bugs.query.all()
     bug = Bugs.query.filter_by(id = id).first()
-    return render_template('Bug Details.html', bug = bug, bugs = bugs)
+
+    return render_template('Bug Details.html', form = form, bug = bug, bugs = bugs, comments = comments)
 
 # update post
 @app.route('/bug/<int:id>/edit', methods=['GET', 'POST'])
@@ -205,7 +208,26 @@ def profile():
     user = current_user._get_current_object()
     return render_template('Profile.html', bugs = bugs, user = user)
 
-# NOTE: Routes by ismailpervez below
+# create comment
+@app.route('/bug/<int:id>/comment', methods = ['GET', 'POST'])
+@login_required
+def add_comment(id):
+    bug_id = Bugs.query.get(id).id
+    bug = Bugs.query.filter_by(id = id).first()
+    form = CommentsForm()
+    comment = form.comment.data
+    author = current_user.id
+    if form.validate_on_submit():
+        comment = Comments(comment = comment, bug_id = bug_id, author = author)
+        db.session.add(comment)
+        db.session.commit()
+
+        flash ('✅ Your Comment Has Been Successfully Added!', 'success')
+        return redirect(url_for('add_comment', id = id))
+
+    return render_template('Add Comment.html', form = form, bug = bug)
+
+
 @app.errorhandler(404)
 def not_found(e):
     return render_template('404.html')
@@ -267,36 +289,6 @@ def delete_user(username):
         db.session.commit()
 
         return "user deleted"
-
-# create comment
-@app.route('/create/comment/<post_id>', methods=['GET','POST'])
-@login_required
-def post_comment(post_id):
-    # form = CreateComment()
-    if request.method == 'GET':
-        '''
-        if current_user:
-            return render_template('Bug Details.html', form=form)
-        
-        else:
-            return render_template('Bug Details.html')
-        '''
-
-    elif request.method == 'POST':
-        '''
-        if form.validate_on_submit():
-            comment = Comments(
-                comment=form.content.data,
-                user_id=current_user.id,
-                bug_id=post_id
-            )
-
-            db.session.add(comment)
-            db.session.commit()
-        '''
-        return render_template('Bug Details.html', form=form) 
-
-# update comment - NOTE: i don't think its important to implement
 
 # delete comment
 @app.route('/delete/comment/<comment_id>', methods=['DELETE'])

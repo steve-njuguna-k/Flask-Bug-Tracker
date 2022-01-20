@@ -30,3 +30,7 @@ class UpdatePostForm(FlaskForm):
         ('Unresolved', 'Unresolved')
     ], render_kw={"placeholder": "Choose Status"})
     submit = SubmitField(label=('Submit'))
+
+class CommentsForm(FlaskForm):
+    comment = TextAreaField(label = 'Comment',validators=[DataRequired(), Length(min=6, max=1000,  message='⚠️ Comment length must be between %(min)d and %(max)d characters!')], render_kw={"placeholder": "Your Comment", 'rows': 5})
+    submit= SubmitField('Submit')

@@ -85,6 +85,30 @@ a:hover {
 	padding-right: 25px;
 }
 
+.btn-secondary, .btn-secondary:active, .btn-secondary:focus{
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+    border-radius: 0px;
+    margin-top: 4px;
+    padding-top: 7px;
+	padding-bottom: 7px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+.btn-secondary:hover{
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+    border-radius: 0px;
+    margin-top: 4px;
+    padding-top: 7px;
+	padding-bottom: 7px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
 .btn-link{
     color: #5277f7;
 	border-radius: 0px;
