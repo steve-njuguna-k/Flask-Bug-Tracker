@@ -78,8 +78,8 @@
                         <br>
                         <p class="card-text">{{ comment.comment }}</p> 
                         <div class="btn-group">
-                            <a class="btn btn-sm btn-success" href="#"><i class="fa fa-thumbs-up"></i> (0) </a>
-                            <a class="btn btn-sm btn-danger" href="#"><i class="fa fa-thumbs-down"></i> (0) </a>
+                            <a class="btn btn-sm btn-success" href="/bug/{{ bug.id }}/comment/{{ comment.id }}/like"><i class="fa fa-thumbs-up"></i> ({{comment.upvotes|length}}) </a>
+                            <a class="btn btn-sm btn-danger" href="/bug/{{ bug.id }}/comment/{{ comment.id }}/dislike"><i class="fa fa-thumbs-down"></i> (0) </a>
                         </div>
                         {% if current_user.id == bug.author %}
                         <a href="{{url_for('delete_comment', id = bug.id, comment_id = comment.id)}}" class="float-right">

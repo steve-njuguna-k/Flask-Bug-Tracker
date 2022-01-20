@@ -12,6 +12,8 @@ from .forms import AddCommentsForm, EditCommentsForm, LoginForm, RegisterForm, C
 from .models import db, User, Bugs, Comments, Upvote, Downvote, Tags
 import ast
 
+from app import models
+
 bcrypt = Bcrypt(app)
 
 @app.route('/')
@@ -279,34 +281,35 @@ def delete_comment(id, comment_id):
     return render_template('Bug Details.html', id = bug.id, bug = bug)
 
 # upvote comment
-@app.route('/upvote/comment/<int:id>')
+@app.route('/bug/<int:id>/comment/<int:comment_id>/like')
 @login_required
-def like_comment(id):
-    comment = Comments.query.get(id)
+def like_comment(id, comment_id):
+    bug = Bugs.query.get(id)
+    comments = Comments.query.filter_by(bug_id = id).order_by(desc(Comments.date_published)).all()
 
-    if not comment:
+    if not bug:
         return "post not found"
 
     else:
-        like = Upvote.query.filter_by(user_id=current_user.id, comment_id=id).first()
+        like = Upvote.query.filter_by(user_id=current_user.id, bug_id = bug.id, comment_id=comment_id).first()
 
         if like:
-            # dislike the post
-            db.session.delete(like)
-            db.session.commit()
-
-            return render_template('Bug Details.html')
+            flash('⚠️ You Can Only Like Once!', 'danger')
+            return render_template('Bug Details.html', bug = bug, comments = comments)
 
         else:
             like = Upvote(
-                user_id = current_user.id,
-                comment_id = comment.id
+                user_id=current_user.id,
+                bug_id = bug.id,
+                comment_id = comment_id
             )
 
             db.session.add(like)
             db.session.commit()
 
-        return render_template('Bug Details.html')
+            flash ('✅ You Have Liked That Comment!', 'success')
+            return render_template('Bug Details.html', bug = bug, comments = comments)
+
 
 @app.errorhandler(404)
 def not_found(e):
@@ -429,35 +432,35 @@ def dislike_post(post_id):
 
         return render_template('Bug Details.html')
 
-# upvote comment
-@app.route('/upvote/comment/<comment_id>')
-@login_required
-def like_comment(comment_id):
-    post = Bugs.query.get(comment_id)
+# # upvote comment
+# @app.route('/upvote/comment/<comment_id>')
+# @login_required
+# def like_comment(comment_id):
+#     post = Bugs.query.get(comment_id)
 
-    if not post:
-        return "post not found"
+#     if not post:
+#         return "post not found"
 
-    else:
-        like = Upvote.query.filter_by(user_id=current_user.id, comment_id=comment_id).first()
+#     else:
+#         like = Upvote.query.filter_by(user_id=current_user.id, comment_id=comment_id).first()
 
-        if like:
-            # dislike the post
-            db.session.delete(like)
-            db.session.commit()
+#         if like:
+#             # dislike the post
+#             db.session.delete(like)
+#             db.session.commit()
 
-            return render_template('Bug Details.html')
+#             return render_template('Bug Details.html')
 
-        else:
-            like = Upvote(
-                user_id=current_user.id,
-                comment_id=comment_id
-            )
+#         else:
+#             like = Upvote(
+#                 user_id=current_user.id,
+#                 comment_id=comment_id
+#             )
 
-            db.session.add(like)
-            db.session.commit()
+#             db.session.add(like)
+#             db.session.commit()
 
-        return render_template('Bug Details.html')
+#         return render_template('Bug Details.html')
 
 # downvote comment
 @app.route('/downvote/comment/<comment_id>')
