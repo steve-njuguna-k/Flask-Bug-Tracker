@@ -106,6 +106,70 @@ a:hover {
 	text-decoration: none;
 }
 
+.btn-danger{
+	background-color: #dd0000;
+	color: #fff;
+}
+
+.btn-danger:hover{
+	background-color: #dd0000;
+	color: #fff;
+}
+
+.btn-outline-danger{
+	border-color: #dd0000;
+	color: #dd0000;
+	background-color: #fff;
+}
+
+.btn-outline-danger:hover{
+	border-color: #dd0000;
+	color: #fff;
+	background-color: #dd0000;
+}
+
+.badge-danger{
+	background-color: #dd0000;
+	color: #fff;
+	border-color: #dd0000;
+}
+
+.btn-success{
+	background-color: #03d87f;
+	color: #fff;
+	border-color: #03d87f;
+}
+
+.btn-success:hover{
+	background-color: #03d87f;
+	color: #fff;
+	border-color: #03d87f;
+}
+
+.btn-warning{
+	background-color: #fcb400;
+	color: #fff;
+	border-color: #fcb400;
+}
+
+.btn-warning:hover{
+	background-color: #fcb400;
+	color: #fff;
+	border-color: #fcb400;
+}
+
+.btn-outline-warning {
+    color: #fcb400;
+    border-color: #fcb400;
+	background-color: #fff;
+}
+
+.btn-outline-warning:hover {
+    color: #fff;
+    border-color: #fcb400;
+	background-color: #fcb400;
+}
+
 .logo{
     margin-bottom: 0px;
 }
