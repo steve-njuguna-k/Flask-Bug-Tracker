@@ -41,7 +41,7 @@ class EditCommentsForm(FlaskForm):
 
 class EditProfileForm(FlaskForm):
     username = StringField(label='Username', validators=[DataRequired(), Length(min=3, max=255,  message='⚠️ Username length must be between %(min)d and %(max)d characters!')], render_kw={"placeholder": "Username"})
-    email = StringField(label='Email Address', validators=[DataRequired(), Email(message='⚠️ Enter A Valid Email Address!')], render_kw={"placeholder": "Email Address"})
+    email = StringField(label='Email Address', validators=[DataRequired(), Email(message='⚠️ Enter A Valid Email Address!')], render_kw={"placeholder": "Email Address", 'readonly': True})
     bio = TextAreaField(label='Bio', validators=[DataRequired(), Length(min=3, max=1000,  message='⚠️ Bio length must be between %(min)d and %(max)d characters!')], render_kw={"placeholder": "Bio", 'rows': 10})
     profession = StringField(label='Profession', validators=[DataRequired(), Length(min=3, max=255,  message='⚠️ Name length must be between %(min)d and %(max)d characters!')], render_kw={"placeholder": "Tags"})
     country = SelectField(label='Select Country',choices=[

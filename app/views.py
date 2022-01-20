@@ -8,7 +8,7 @@ from .token import confirm_token, generate_confirmation_token
 from flask_bcrypt import Bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from .email import send_email
-from .forms import AddCommentsForm, EditCommentsForm, LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
+from .forms import AddCommentsForm, EditCommentsForm, EditProfileForm, LoginForm, RegisterForm, CreatePostForm, UpdatePostForm
 from .models import db, User, Bugs, Comments, CommentUpvote, CommentDownvote, Tags, PostUpvote, PostDownvote
 import ast
 
@@ -402,6 +402,46 @@ def dislike_post(id):
 
             flash ('✅ You Have Disliked That Post!', 'success')
             return render_template('Bug Details.html', bug = bug, comments = comments, bug_id = id)
+
+@app.route('/update/profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    user = current_user._get_current_object()
+
+    if form.validate_on_submit():        
+        user.username = form.username.data
+        user.email = form.email.data
+        user.bio = form.bio.data
+        user.profession = form.profession.data
+        user.country = form.country.data
+        user.website_link = form.website_link.data
+        user.github_link = form.github_link.data
+        user.twitter_link = form.twitter_link.data
+        user.linkedin_link = form.linkedin_link.data
+        user.facebook_link = form.facebook_link.data
+        user.codewars_link = form.codewars_link.data
+
+        db.session.add(user)
+        db.session.commit()
+
+        flash ('✅ Your Profile Info Has Been Successfully Updated!', 'success')
+        return redirect(url_for('edit_profile', user = user, form = form))
+    
+    elif request.method == 'GET':
+        form.username.data = user.username
+        form.email.data = user.email
+        form.bio.data = user.bio
+        form.profession.data = user.profession
+        form.country.data = user.country
+        form.website_link.data = user.website_link
+        form.github_link.data = user.github_link
+        form.twitter_link.data = user.twitter_link
+        form.linkedin_link.data = user.linkedin_link
+        form.facebook_link.data = user.facebook_link
+        form.codewars_link.data = user.codewars_link
+
+    return render_template('Edit Profile.html', user = user, form = form)
 
 @app.errorhandler(404)
 def not_found(e):
