@@ -1,0 +1,65 @@
+{% extends "Base.html" %}
+
+<div class="container">
+	{% include 'Navbar.html' %}
+</div>
+
+{% block content %}
+<div class="container-fluid" style="margin-top: 30px;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show text-center" role="alert">
+                    <span>{{ message }} <a href="/bug/{{bug.id}}/bug-details" class="alert-link">Go Back To Post</a></span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="row">
+        <div class="col-sm-2">
+            
+        </div> 
+        <div class="col-sm-8">
+            <h1 class="text-center">Edit Bug Details</h1>
+            <form style="margin-bottom: 50px;" action="" method="POST">
+                {{ form.csrf_token }}
+                {% for field, errors in form.errors.items() %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ ', '.join(errors) }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+                <div class="mb-3">
+                    {{ form.title(class="form-control", placeholder="Title") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.description(class="form-control", placeholder="Description") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.bug_status(class="form-control", placeholder="Tags") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.submit(class="form-control btn btn-primary", style="border-color:#5277f7", placeholder="Submit") }}
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-2">
+            
+        </div>       
+    </div>
+</div>
+
+{% block footer %}
+	<div class="container">
+		<div id="footer">
+			<p class="text-center">© 2022 Bug Tracker</p>
+		</div>
+	</div>
+{% endblock %}
+
+{% endblock %}

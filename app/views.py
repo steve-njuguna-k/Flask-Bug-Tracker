@@ -153,6 +153,51 @@ def bugs_details(id):
     bug = Bugs.query.filter_by(id = id).first()
     return render_template('Bug Details.html', bug = bug, bugs = bugs)
 
+# update post
+@app.route('/bug/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def update_bug_post(id):
+    bug = Bugs.query.get_or_404(id)
+    form = UpdatePostForm(request.form)
+
+    if form.validate_on_submit():        
+        bug.title = form.title.data
+        bug.description = form.description.data
+        bug.bug_status = form.bug_status.data
+        bug.author = current_user._get_current_object().id
+
+        db.session.add(bug)
+        db.session.commit()
+
+        flash ('✅ The Bug Post Has Been Successfully Updated!', 'success')
+        return redirect(url_for('update_bug_post', id = id))
+    
+    elif request.method == 'GET':
+        form.title.data = bug.title
+        form.description.data = bug.description
+        form.bug_status.data = bug.bug_status
+
+    if current_user.id != bug.author:
+        flash('⚠️ You Are Not Authorized To Edit This Post! You Are Not The Author', 'danger')
+        return redirect(url_for('bugs_details', id = id))
+    
+    return render_template('Edit Bug.html', bug = bug, form = form)
+
+# delete post
+@login_required
+@app.route('/delete/post/<post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    post = Bugs.query.get(post_id)
+
+    if not post:
+        return render_template('404.html')
+
+    else:
+        db.session.delete(post)
+        db.session.commit()
+
+        return render_template('Dashboard.html')
+
 @app.route('/profile')
 def profile():
     return render_template('Profile.html')
@@ -219,68 +264,6 @@ def delete_user(username):
         db.session.commit()
 
         return "user deleted"
-
-# get all posts - from latest
-@app.route('/all/posts')
-def get_posts():
-    posts = Bugs.query.all()
-    return render_template('Bugs.html', bugs=posts)
-
-# get full post
-@app.route('/post/<post_id>')
-def get_post(post_id):
-    post = Bugs.query.get(post_id)
-
-    if not post:
-        return redirect(url_for('not_found'))
-
-    else:
-        return render_template('Bug Details.html', bug=post)
-
-# update post
-@app.route('/update/post/<post_id>', methods=['GET', 'PUT'])
-@login_required
-def update_post(post_id):
-    post = Bugs.query.get(post_id)
-    form = UpdatePostForm()
-    if not post:
-        return render_template('404.html')
-
-    else:
-        if request.method == 'GET':
-            
-            form.title.data = post.title
-            form.description.data = post.description
-            # form.tags.data = ' '.join(ast.literal_eval(post.tags))
-            form.status.data = post.status
-            
-            return render_template('Update Bug.html', form=form)
-
-        elif request.method == 'PUT':
-            
-            post.title = form.title.data
-            post.description = form.description.data
-            post.tags = str(post.tags.data.split(' '))
-            # post.status = form.status.data
-
-            db.session.commit()
-            
-            return render_template('Update Bug.html', form=form)
-
-# delete post
-@login_required
-@app.route('/delete/post/<post_id>', methods=['DELETE'])
-def delete_post(post_id):
-    post = Bugs.query.get(post_id)
-
-    if not post:
-        return render_template('404.html')
-
-    else:
-        db.session.delete(post)
-        db.session.commit()
-
-        return render_template('Dashboard.html')
 
 # create comment
 @app.route('/create/comment/<post_id>', methods=['GET','POST'])
