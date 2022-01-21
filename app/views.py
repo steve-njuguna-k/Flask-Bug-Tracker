@@ -208,15 +208,17 @@ def dashboard():
     return render_template('Dashboard.html', bugs = bugs)
 
 @app.route('/profile')
+@login_required
 def profile():
     bugs = Bugs.query.filter_by(author = current_user._get_current_object().id).all()
     user = current_user._get_current_object()
     return render_template('Profile.html', bugs = bugs, user = user)
 
 @app.route('/author/<int:id>')
+@login_required
 def author(id):
     user = User.query.get(id)
-    bugs = Bugs.query.filter_by(author = current_user._get_current_object().id).all()
+    bugs = Bugs.query.filter_by(author = user.id).all()
     return render_template('Profile.html', user = user, bugs = bugs)
 
 # create comment

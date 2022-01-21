@@ -50,9 +50,13 @@
                         <div class="d-flex flex-row user-info">
                             <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
                             <div class="d-flex flex-column justify-content-start ml-2">
+                                {% if current_user.is_authenticated %}
                                 <a href="/author/{{ bug.user_bug.id }}">
                                     <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
                                 </a>
+                                {% else %}
+                                    <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
+                                {% endif %}
                                 <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y, %I:%M %p') }}</span>
                             </div>
                         </div>
@@ -78,9 +82,13 @@
                             <div class="d-flex flex-row user-info">
                                 <img class="rounded" src="{{ comment.user_comment.profile_pic}}" height="50" width="50">
                                 <div class="d-flex flex-column justify-content-start ml-2">
+                                    {% if current_user.is_authenticated %}
                                     <a href="/author/{{ comment.user_comment.id }}">
                                         <span class="d-block font-weight-bold text-primary">{{ comment.user_comment.username }}</span>
                                     </a>
+                                    {% else %}
+                                        <span class="d-block font-weight-bold text-primary">{{ comment.user_comment.username }}</span>
+                                    {% endif %}
                                     <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ comment.date_published.strftime('%d/%m/%Y, %I:%M %p') }}</span>
                                 </div>
                             </div>
@@ -115,12 +123,26 @@
                     <div class="card-body">
                     <center><img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="100" width="100"></center>
                     <br>
+                    {% if current_user.is_authenticated %}
                     <a href="/author/{{ bug.user_bug.id }}">
                         <h3 class="card-subtitle mb-2 text-primary text-center"><b>{{ bug.user_bug.username }}</b></h3>
                     </a>
+                    {% else %}
+                        <h3 class="card-subtitle mb-2 text-primary text-center"><b>{{ bug.user_bug.username }}</b></h3>
+                    {% endif %}
                     <center><span class="date text-black" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> Member Since: {{ bug.user_bug.registered_on.strftime('%d/%m/%Y, %I:%M %p') }}</span></center>
-                    <p class="card-text text-center py-3">{{ bug.user_bug.bio }}</p>
-                    <center><a href="/author/{{ bug.user_bug.id }}" class="btn btn-primary btn-sm">Visit Profile</a></center>
+                        {% if bug.user_bug.bio %}
+                        <p class="card-text text-center py-3">{{ bug.user_bug.bio }}</p>
+                        {% else %}
+                        <p class="card-text text-center py-3"></p>
+                        {% endif %}
+                    <center>
+                        {% if current_user.is_authenticated %}
+                        <a href="/author/{{ bug.user_bug.id }}" class="btn btn-primary btn-sm">Visit Profile</a>
+                        {% else %}
+
+                        {% endif %}
+                    </center>
                     </div>
                 </div>
                 <br>
@@ -131,9 +153,13 @@
                             <div class="d-flex flex-row user-info">
                                 <img class="rounded" src="{{ bug.user_bug.profile_pic }}" height="50" width="50">
                                 <div class="d-flex flex-column justify-content-start ml-2">
+                                    {% if current_user.is_authenticated %}
                                     <a href="/author/{{ bug.user_bug.id }}">
                                         <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
                                     </a>
+                                    {% else %}
+                                    <span class="d-block font-weight-bold text-primary">{{ bug.user_bug.username }}</span>
+                                    {% endif %}
                                     <span class="date text-black-50" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> {{ bug.created_on.strftime('%d/%m/%Y, %I:%M %p') }}</span>
                                 </div>
                             </div>
