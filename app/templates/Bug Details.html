@@ -119,7 +119,7 @@
                         <h3 class="card-subtitle mb-2 text-primary text-center"><b>{{ bug.user_bug.username }}</b></h3>
                     </a>
                     <center><span class="date text-black" style="font-size: 15px;"><i class="fas fa-calendar-alt"></i> Member Since: {{ bug.user_bug.registered_on.strftime('%d/%m/%Y, %I:%M %p') }}</span></center>
-                    <p class="card-text text-center py-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                    <p class="card-text text-center py-3">{{ bug.user_bug.bio }}</p>
                     <center><a href="/author/{{ bug.user_bug.id }}" class="btn btn-primary btn-sm">Visit Profile</a></center>
                     </div>
                 </div>
